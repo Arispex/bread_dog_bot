@@ -75,7 +75,7 @@ Python环境安装完成
 
 由于文件过大 导致无法上传 大概有1.2G(为什么那么大)
 
-可前往[QQ群](https://qm.qq.com/cgi-bin/qm/qr?k=_H0dtNAI4DVrPv1B7mNkzUpMXWAzUPDR&authKey=lesF/J2M70pboCkG+bPg5OiQsxAgOV60GJQ1Daxex4GKULw/lRFMSVT0sbN5D0ES&noverify=0)：724165215
+可前往QQ群：772721898
 
 下载文件
 
