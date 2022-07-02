@@ -1,0 +1,20 @@
+<head>
+  <meta charset="utf-8" />
+  <link href="css/whitelist.css" rel="stylesheet" type="text/css">
+</head>
+<body>
+<div class="main">
+  <table>
+    <tr>
+      <th>QQ</th>
+      <th>玩家昵称</th>
+    </tr>
+    {% for i in whitelist %}
+    <tr>
+      <td>{{ i[1] }}</td>
+      <td>{{ i[2] }}</td>
+    </tr>
+    {% endfor %}
+  </table>
+</div>
+</body>

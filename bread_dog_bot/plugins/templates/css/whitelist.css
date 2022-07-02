@@ -1,0 +1,17 @@
+.main {
+    display: flex;
+    justify-content: center;
+}
+table {
+    /*border-spacing: 0;*/
+}
+tr {
+    background: #95e1d4;
+}
+td {
+    background: #eff8ff;
+    text-align: center;
+}
+th {
+    text-align: center;
+}
