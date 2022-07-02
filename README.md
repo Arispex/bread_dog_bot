@@ -75,9 +75,9 @@ Python环境安装完成
 
 由于文件过大 导致无法上传 大概有1.2G(为什么那么大)
 
-可前往QQ群：772721898
+可前往QQ群：772721898 下载文件或直链下载
 
-下载文件
+依赖：www.miaovps.com/solved_packageMissInInstalling_mu_visual_cpp_build_tools_2015_update_3_x64_dvd_dfd9a39c.iso
 
 双击打开下载好的iso文件
 
