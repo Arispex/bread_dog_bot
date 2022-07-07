@@ -1,6 +1,8 @@
 from nonebot import on_command
 from nonebot.adapters.onebot.v11 import Bot, Event
 
+import config
+
 help = on_command("帮助")
 
 
@@ -165,5 +167,69 @@ async def help_handle(bot: Bot, event: Event):
                               "重置白名单\n"
                               "参数：\n"
                               "无")
+        elif command == "签到":
+            await help.finish("——签到——\n"
+                              "权限：\n"
+                              "无\n"
+                              "介绍：\n"
+                              "每日签到\n"
+                              "用法：\n"
+                              "签到\n"
+                              "参数：\n"
+                              "无")
+        elif command == "wiki":
+            await help.finish("——wiki——\n"
+                              "权限：\n"
+                              "无\n"
+                              "介绍：\n"
+                              "在wiki中查询指定内容\n"
+                              "用法：\n"
+                              "wiki\n"
+                              "参数：\n"
+                              "无")
+        elif command == f"添加{config.Currency.name}":
+            await help.finish(f"——添加{config.Currency.name}——\n"
+                              "权限：\n"
+                              "管理员\n"
+                              "介绍：\n"
+                              "给指定玩家添加货币\n"
+                              "用法：\n"
+                              f"添加{config.Currency.name} [玩家昵称/QQ] [数量]\n"
+                              "参数：\n"
+                              "玩家昵称/QQ - 玩家昵称或QQ号\n"
+                              "数量 - 要添加的数量")
+        elif command == f"扣除{config.Currency.name}":
+            await help.finish(f"——扣除{config.Currency.name}——\n"
+                              "权限：\n"
+                              "管理员\n"
+                              "介绍：\n"
+                              "扣除指定玩家的货币\n"
+                              "用法：\n"
+                              f"扣除{config.Currency.name} [玩家昵称/QQ] [数量]\n"
+                              "参数：\n"
+                              "玩家昵称/QQ - 玩家昵称或QQ号\n"
+                              "数量 - 要扣除的数量")
+        elif command == f"设置{config.Currency.name}":
+            await help.finish(f"——设置{config.Currency.name}——\n"
+                              "权限：\n"
+                              "管理员\n"
+                              "介绍：\n"
+                              "设置指定玩家的货币数量\n"
+                              "用法：\n"
+                              f"设置{config.Currency.name} [玩家昵称/QQ] [数量]\n"
+                              "参数：\n"
+                              "玩家昵称/QQ - 玩家昵称或QQ号\n"
+                              "数量 - 要设置的数量")
+        elif command == "玩家信息":
+            await help.finish("——玩家信息——\n"
+                              "权限：\n"
+                              "无\n"
+                              "介绍：\n"
+                              "查询自己或指定玩家或QQ的信息\n"
+                              "不填参数则查询自己的信息\n"
+                              "用法：\n"
+                              "玩家信息 [玩家昵称/QQ]\n"
+                              "参数：\n"
+                              "玩家昵称/QQ - 可选参数 玩家昵称或QQ号")
     else:
         await help.finish("执行失败，用法错误\n请输入【帮助 帮助】 获取该功能更多信息")

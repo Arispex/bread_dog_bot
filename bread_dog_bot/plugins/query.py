@@ -13,6 +13,9 @@ async def online_players_handle(bot: Bot, event: Event):
     result, server_info_list = utils.server.GetInfo.all()
     msg = []
     if result:
+        if not server_info_list:
+            msg.append("群主很懒，没有添加任何服务器！")
+
         for i in server_info_list:
             conn = models.server.Connect(i[2], i[3], i[4])
             result, player_list = conn.online_players()
@@ -37,6 +40,8 @@ async def server_list_handle(bot: Bot, event: Event):
     result, server_info_list = utils.server.GetInfo.all()
     msg = []
     if result:
+        if not server_info_list:
+            msg.append("群主很懒，没有添加任何服务器！")
         for i in server_info_list:
             conn = models.server.Connect(i[2], i[3], i[4])
             if conn.status_code:

@@ -1,19 +1,10 @@
 from nonebot import on_command
 from nonebot.adapters.onebot.v11 import Bot, Event, MessageSegment, Message
 from nonebot.permission import SUPERUSER
-
 import models.server
 import utils.server
 import utils.admin
 import utils.whitelist
-import io
-from nonebot_plugin_htmlrender import (
-    text_to_pic,
-    md_to_pic,
-    template_to_pic,
-    get_new_page,
-)
-from PIL import Image
 
 add_whitelist = on_command("添加白名单")
 
@@ -75,35 +66,6 @@ async def delete_whitelist_handle(bot: Bot, event: Event):
 
     else:
         await delete_whitelist.finish("删除失败！\n权限不足！\n请输入【帮助 删除白名单】获取该功能更多信息")
-
-
-whitelist = on_command("白名单列表")
-
-
-@whitelist.handle()
-async def whitelist_handle(bot: Bot, event: Event):
-    from pathlib import Path
-
-    template_path = str(Path(__file__).parent / "templates")
-    template_name = "whitelist.html"
-    # 设置模板
-    # 模板中本地资源地址需要相对于 base_url 或使用绝对路径
-    pic = await template_to_pic(
-        template_path=template_path,
-        template_name=template_name,
-        templates={"whitelist": utils.whitelist.GetInfo.all()},
-        pages={
-            "viewport": {"width": 250, "height": len(utils.whitelist.GetInfo.all()) * 25},
-            "base_url": f"file://{template_path}",
-        },
-        wait=2,
-    )
-
-    a = Image.open(io.BytesIO(pic))
-    a.save("whitelist.png", format="PNG")
-
-    await whitelist.finish(MessageSegment.image(pic))
-
 
 reset = on_command("重置白名单", permission=SUPERUSER)
 

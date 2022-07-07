@@ -30,7 +30,10 @@ nonebot.load_from_toml("pyproject.toml")
 # 
 # config = driver.config
 # do something...
-
+nonebot.init(apscheduler_autostart=True)
+nonebot.init(apscheduler_config={
+    "apscheduler.timezone": "Asia/Shanghai"
+})
 
 if __name__ == "__main__":
     nonebot.logger.warning("Always use `nb run` to start the bot instead of manually running!")

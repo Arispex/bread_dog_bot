@@ -83,7 +83,7 @@ class Connect:
                 if result:
                     return True, None
                 else:
-                    return False, reason
+                    return False, "你已经添加过白名单了"
             else:
                 # 如果玩家不存在于白名单中
                 result, reason = utils.whitelist.add_to_server(self.ip, self.port, self.token, name)

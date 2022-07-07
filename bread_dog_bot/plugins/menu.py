@@ -1,5 +1,6 @@
 from nonebot import on_command
 from nonebot.adapters.onebot.v11 import Bot, Event, MessageSegment, Message
+import config
 
 menu = on_command("菜单")
 
@@ -34,6 +35,7 @@ async def basic_handle(bot: Bot, event: Event):
         f"{MessageSegment.face(147)}在线\n"
         f"{MessageSegment.face(147)}执行\n"
         f"{MessageSegment.face(147)}发送\n"
+        f"{MessageSegment.face(147)}wiki\n"
     ))
 
 # 绑定功能
@@ -45,7 +47,6 @@ bind = on_command("绑定功能")
 async def bind_handle(bot: Bot, event: Event):
     await bind.finish(Message(
         "———绑定功能———\n"
-        f"{MessageSegment.face(147)}白名单列表\n"
         f"{MessageSegment.face(147)}添加白名单\n"
         f"{MessageSegment.face(147)}删除白名单\n"
         f"{MessageSegment.face(147)}重置白名单列表\n"
@@ -59,10 +60,11 @@ player = on_command("玩家功能")
 async def player_handle(bot: Bot, event: Event):
     await player.finish(Message(
         "———玩家功能———\n"
-        f"{MessageSegment.face(147)}...\n"
-        f"{MessageSegment.face(147)}...\n"
-        f"{MessageSegment.face(147)}...\n"
-        f"{MessageSegment.face(147)}...\n"
+        f"{MessageSegment.face(147)}签到\n"
+        f"{MessageSegment.face(147)}玩家信息\n"
+        f"{MessageSegment.face(147)}添加{config.Currency.name}\n"
+        f"{MessageSegment.face(147)}扣除{config.Currency.name}\n"
+        f"{MessageSegment.face(147)}设置{config.Currency.name}\n"
     ))
 
 
@@ -75,7 +77,6 @@ admin = on_command("管理功能")
 async def admin_handle(bot: Bot, event: Event):
     await admin.finish(Message(
         "———管理功能———\n"
-        f"{MessageSegment.face(147)}管理员列表\n"
         f"{MessageSegment.face(147)}添加管理员\n"
         f"{MessageSegment.face(147)}删除管理员\n"
         f"{MessageSegment.face(147)}...\n"
@@ -148,7 +149,7 @@ async def about_handle(bot: Bot, event: Event):
         "———关于———\n"
         "bread dog bot\n"
         "一个高度可自定义化的 Terraria TShock Bot\n"
-        "版本: 1.1.0\n"
+        "版本: 1.2.0\n"
         "作者: 千亦\n"
         "Github: https://github.com/Qianyiovo/breadDogBot"
     ))
