@@ -91,10 +91,10 @@ cloud = on_command("云黑功能")
 async def cloud_handle(bot: Bot, event: Event):
     await cloud.finish(Message(
         "———云黑功能———\n"
-        f"{MessageSegment.face(147)}...\n"
-        f"{MessageSegment.face(147)}...\n"
-        f"{MessageSegment.face(147)}...\n"
-        f"{MessageSegment.face(147)}...\n"
+        f"{MessageSegment.face(147)}云黑检测\n"
+        f"{MessageSegment.face(147)}云黑信息\n"
+        f"{MessageSegment.face(147)}添加云黑\n"
+        f"{MessageSegment.face(147)}删除云黑\n"
     ))
 
 
@@ -149,7 +149,7 @@ async def about_handle(bot: Bot, event: Event):
         "———关于———\n"
         "bread dog bot\n"
         "一个高度可自定义化的 Terraria TShock Bot\n"
-        "版本: 1.2.0\n"
+        "版本: 1.3.0\n"
         "作者: 千亦\n"
         "Github: https://github.com/Qianyiovo/breadDogBot"
     ))

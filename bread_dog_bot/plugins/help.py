@@ -184,9 +184,9 @@ async def help_handle(bot: Bot, event: Event):
                               "介绍：\n"
                               "在wiki中查询指定内容\n"
                               "用法：\n"
-                              "wiki\n"
+                              "wiki [内容]\n"
                               "参数：\n"
-                              "无")
+                              "内容 - 要查询的内容")
         elif command == f"添加{config.Currency.name}":
             await help.finish(f"——添加{config.Currency.name}——\n"
                               "权限：\n"
@@ -231,5 +231,46 @@ async def help_handle(bot: Bot, event: Event):
                               "玩家信息 [玩家昵称/QQ]\n"
                               "参数：\n"
                               "玩家昵称/QQ - 可选参数 玩家昵称或QQ号")
+        elif command == "云黑检测":
+            await help.finish("——云黑检测——\n"
+                              "权限：\n"
+                              "管理员\n"
+                              "介绍：\n"
+                              "检测群内是否存在云黑玩家\n"
+                              "用法：\n"
+                              "云黑检测\n"
+                              "参数：\n"
+                              "无")
+        elif command == "云黑信息":
+            await help.finish("——云黑信息——\n"
+                              "权限：\n"
+                              "管理员\n"
+                              "介绍：\n"
+                              "查询指定QQ的云黑信息\n"
+                              "用法：\n"
+                              "云黑信息 [QQ]\n"
+                              "参数：\n"
+                              "QQ - 查询的QQ")
+        elif command == "添加云黑":
+            await help.finish("——添加云黑——\n"
+                              "权限：\n"
+                              "管理员\n"
+                              "介绍：\n"
+                              "添加指定QQ至云黑\n"
+                              "用法：\n"
+                              "添加云黑 [QQ] [原因]\n"
+                              "参数：\n"
+                              "QQ - 添加的QQ\n"
+                              "原因 - 添加原因")
+        elif command == "删除云黑":
+            await help.finish("——删除云黑——\n"
+                              "权限：\n"
+                              "管理员\n"
+                              "介绍：\n"
+                              "删除云黑中的指定QQ\n"
+                              "用法：\n"
+                              "删除云黑 [QQ]\n"
+                              "参数：\n"
+                              "QQ - 删除的QQ")
     else:
         await help.finish("执行失败，用法错误\n请输入【帮助 帮助】 获取该功能更多信息")
