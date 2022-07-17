@@ -29,14 +29,28 @@ basic = on_command("基础功能")
 
 @basic.handle()
 async def basic_handle(bot: Bot, event: Event):
-    await basic.finish(Message(
-        "———基础功能———\n"
-        f"{MessageSegment.face(147)}服务器列表\n"
-        f"{MessageSegment.face(147)}在线\n"
-        f"{MessageSegment.face(147)}执行\n"
-        f"{MessageSegment.face(147)}发送\n"
-        f"{MessageSegment.face(147)}wiki\n"
-    ))
+    text = event.get_plaintext().split(" ")
+    try:
+        num = int(text[1])
+    except IndexError:
+        num = 1
+    if num == 1:
+        await basic.finish(Message(
+            "———基础功能———\n"
+            f"{MessageSegment.face(147)}服务器列表\n"
+            f"{MessageSegment.face(147)}在线\n"
+            f"{MessageSegment.face(147)}执行\n"
+            f"{MessageSegment.face(147)}发送\n"
+            f"{MessageSegment.face(147)}wiki\n"
+            f"当前页数：1/2\n"
+            f"输入 基础功能 2 查看下一页"
+        ))
+    elif num == 2:
+        await basic.finish(Message(
+            "———基础功能———\n"
+            f"{MessageSegment.face(147)}进度\n"
+            f"当前页数：2/2\n"
+        ))
 
 # 绑定功能
 # 白名单...
@@ -45,12 +59,19 @@ bind = on_command("绑定功能")
 
 @bind.handle()
 async def bind_handle(bot: Bot, event: Event):
-    await bind.finish(Message(
-        "———绑定功能———\n"
-        f"{MessageSegment.face(147)}添加白名单\n"
-        f"{MessageSegment.face(147)}删除白名单\n"
-        f"{MessageSegment.face(147)}重置白名单列表\n"
-    ))
+    text = event.get_plaintext().split(" ")
+    try:
+        num = int(text[1])
+    except IndexError:
+        num = 1
+    if num == 1:
+        await bind.finish(Message(
+            "———绑定功能———\n"
+            f"{MessageSegment.face(147)}添加白名单\n"
+            f"{MessageSegment.face(147)}删除白名单\n"
+            f"{MessageSegment.face(147)}重置白名单列表\n"
+            f"当前页数：1/1\n"
+        ))
 
 
 player = on_command("玩家功能")
@@ -58,15 +79,28 @@ player = on_command("玩家功能")
 
 @player.handle()
 async def player_handle(bot: Bot, event: Event):
-    await player.finish(Message(
-        "———玩家功能———\n"
-        f"{MessageSegment.face(147)}签到\n"
-        f"{MessageSegment.face(147)}玩家信息\n"
-        f"{MessageSegment.face(147)}添加{config.Currency.name}\n"
-        f"{MessageSegment.face(147)}扣除{config.Currency.name}\n"
-        f"{MessageSegment.face(147)}设置{config.Currency.name}\n"
-    ))
-
+    text = event.get_plaintext().split(" ")
+    try:
+        num = int(text[1])
+    except IndexError:
+        num = 1
+    if num == 1:
+        await player.finish(Message(
+            "———玩家功能———\n"
+            f"{MessageSegment.face(147)}签到\n"
+            f"{MessageSegment.face(147)}玩家信息\n"
+            f"{MessageSegment.face(147)}玩家背包\n"
+            f"{MessageSegment.face(147)}添加{config.Currency.name}\n"
+            f"{MessageSegment.face(147)}扣除{config.Currency.name}\n"
+            f"当前页数：1/2\n"
+            f"输入 玩家功能 2 查看下一页"
+        ))
+    elif num == 2:
+        await player.finish(Message(
+            "———玩家功能———\n"
+            f"{MessageSegment.face(147)}设置{config.Currency.name}\n"
+            f"当前页数：2/2\n"
+        ))
 
 # 管理功能
 # 操作管理员的一些功能 而不是只有管理员可以使用的功能
@@ -75,12 +109,19 @@ admin = on_command("管理功能")
 
 @admin.handle()
 async def admin_handle(bot: Bot, event: Event):
-    await admin.finish(Message(
-        "———管理功能———\n"
-        f"{MessageSegment.face(147)}添加管理员\n"
-        f"{MessageSegment.face(147)}删除管理员\n"
-        f"{MessageSegment.face(147)}...\n"
-    ))
+    text = event.get_plaintext().split(" ")
+    try:
+        num = int(text[1])
+    except IndexError:
+        num = 1
+    if num == 1:
+        await admin.finish(Message(
+            "———管理功能———\n"
+            f"{MessageSegment.face(147)}添加管理员\n"
+            f"{MessageSegment.face(147)}删除管理员\n"
+            f"{MessageSegment.face(147)}管理员列表\n"
+            f"当前页数：1/1\n"
+        ))
 
 # 云黑
 # 云端黑名单系统
@@ -89,13 +130,20 @@ cloud = on_command("云黑功能")
 
 @cloud.handle()
 async def cloud_handle(bot: Bot, event: Event):
-    await cloud.finish(Message(
-        "———云黑功能———\n"
-        f"{MessageSegment.face(147)}云黑检测\n"
-        f"{MessageSegment.face(147)}云黑信息\n"
-        f"{MessageSegment.face(147)}添加云黑\n"
-        f"{MessageSegment.face(147)}删除云黑\n"
-    ))
+    text = event.get_plaintext().split(" ")
+    try:
+        num = int(text[1])
+    except IndexError:
+        num = 1
+    if num == 1:
+        await cloud.finish(Message(
+            "———云黑功能———\n"
+            f"{MessageSegment.face(147)}云黑检测\n"
+            f"{MessageSegment.face(147)}云黑信息\n"
+            f"{MessageSegment.face(147)}添加云黑\n"
+            f"{MessageSegment.face(147)}删除云黑\n"
+            f"当前页数：1/1\n"
+        ))
 
 
 lottery = on_command("抽奖功能")
@@ -103,13 +151,17 @@ lottery = on_command("抽奖功能")
 
 @lottery.handle()
 async def lottery_handle(bot: Bot, event: Event):
-    await lottery.finish(Message(
-        "———抽奖功能———\n"
-        f"{MessageSegment.face(147)}...\n"
-        f"{MessageSegment.face(147)}...\n"
-        f"{MessageSegment.face(147)}...\n"
-        f"{MessageSegment.face(147)}...\n"
-    ))
+    text = event.get_plaintext().split(" ")
+    try:
+        num = int(text[1])
+    except IndexError:
+        num = 1
+    if num == 1:
+        await lottery.finish(Message(
+            "———抽奖功能———\n"
+            f"{MessageSegment.face(147)}敬请期待...\n"
+            f"当前页数：1/1\n"
+        ))
 
 
 shop = on_command("商店功能")
@@ -117,13 +169,17 @@ shop = on_command("商店功能")
 
 @shop.handle()
 async def shop_handle(bot: Bot, event: Event):
-    await shop.finish(Message(
-        "———商店功能———\n"
-        f"{MessageSegment.face(147)}...\n"
-        f"{MessageSegment.face(147)}...\n"
-        f"{MessageSegment.face(147)}...\n"
-        f"{MessageSegment.face(147)}...\n"
-    ))
+    text = event.get_plaintext().split(" ")
+    try:
+        num = int(text[1])
+    except IndexError:
+        num = 1
+    if num == 1:
+        await shop.finish(Message(
+            "———商店功能———\n"
+            f"{MessageSegment.face(147)}敬请期待\n"
+            f"当前页数：1/1\n"
+        ))
 
 
 rank = on_command("排行榜功能")
@@ -131,13 +187,17 @@ rank = on_command("排行榜功能")
 
 @rank.handle()
 async def rank_handle(bot: Bot, event: Event):
-    await rank.finish(Message(
-        "———排行榜功能———\n"
-        f"{MessageSegment.face(147)}...\n"
-        f"{MessageSegment.face(147)}...\n"
-        f"{MessageSegment.face(147)}...\n"
-        f"{MessageSegment.face(147)}...\n"
-    ))
+    text = event.get_plaintext().split(" ")
+    try:
+        num = int(text[1])
+    except IndexError:
+        num = 1
+    if num == 1:
+        await rank.finish(Message(
+            "———排行榜功能———\n"
+            f"{MessageSegment.face(147)}敬请期待\n"
+            f"当前页数：1/1\n"
+        ))
 
 
 about = on_command("关于")
@@ -149,7 +209,8 @@ async def about_handle(bot: Bot, event: Event):
         "———关于———\n"
         "bread dog bot\n"
         "一个高度可自定义化的 Terraria TShock Bot\n"
-        "版本: 1.3.0\n"
+        "版本: 1.4.0\n"
+        "更新时间: 2022/07/17\n"
         "作者: 千亦\n"
         "Github: https://github.com/Qianyiovo/breadDogBot"
     ))

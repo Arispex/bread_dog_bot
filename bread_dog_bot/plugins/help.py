@@ -137,22 +137,12 @@ async def help_handle(bot: Bot, event: Event):
                               "参数：\n"
                               "序号 - 服务器序号\n"
                               "内容 - 要发送的消息内容")
-        elif command == "白名单列表":
-            await help.finish("——白名单列表——\n"
-                              "权限：\n"
-                              "无\n"
-                              "介绍：\n"
-                              "查看数据库中的白名单\n"
-                              "用法：\n"
-                              "白名单列表\n"
-                              "参数：\n"
-                              "无")
         elif command == "管理员列表":
             await help.finish("——管理员列表——\n"
                               "权限：\n"
                               "无\n"
                               "介绍：\n"
-                              "查看机器人的管理员\n"
+                              "查看本群的机器人的管理员\n"
                               "用法：\n"
                               "管理员列表\n"
                               "参数：\n"
@@ -226,11 +216,10 @@ async def help_handle(bot: Bot, event: Event):
                               "无\n"
                               "介绍：\n"
                               "查询自己或指定玩家或QQ的信息\n"
-                              "不填参数则查询自己的信息\n"
                               "用法：\n"
                               "玩家信息 [玩家昵称/QQ]\n"
                               "参数：\n"
-                              "玩家昵称/QQ - 可选参数 玩家昵称或QQ号")
+                              "玩家昵称/QQ - 可选参数 玩家昵称或QQ号 不填则查询自己")
         elif command == "云黑检测":
             await help.finish("——云黑检测——\n"
                               "权限：\n"
@@ -272,5 +261,26 @@ async def help_handle(bot: Bot, event: Event):
                               "删除云黑 [QQ]\n"
                               "参数：\n"
                               "QQ - 删除的QQ")
+        elif command == "玩家背包":
+            await help.finish("——玩家背包——\n"
+                              "权限：\n"
+                              "无\n"
+                              "介绍：\n"
+                              "查询服务器中指定玩家的背包\n"
+                              "用法：\n"
+                              "玩家背包 [序号] [昵称/QQ]\n"
+                              "参数：\n"
+                              "序号 - 服务器序号\n"
+                              "昵称 - 玩家昵称 可选参数 不填则查询自己")
+        elif command == "进度":
+            await help.finish("——进度——\n"
+                              "权限：\n"
+                              "无\n"
+                              "介绍：\n"
+                              "查询服务器进度\n"
+                              "用法：\n"
+                              "进度 [序号]\n"
+                              "参数：\n"
+                              "序号 - 服务器序号\n")
     else:
         await help.finish("执行失败，用法错误\n请输入【帮助 帮助】 获取该功能更多信息")

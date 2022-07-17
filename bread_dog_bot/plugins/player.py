@@ -6,6 +6,10 @@ from nonebot import require
 import utils.server
 import utils.admin
 import utils.whitelist
+import models.server
+from PIL import Image, ImageChops, ImageDraw, ImageFont
+import time
+import os
 
 sign_in = on_command("签到")
 
@@ -144,3 +148,187 @@ async def player_info_handle(bot: Bot, event: Event):
             await player_info.finish(Message(f"查询失败！\n{player.reason}"))
     else:
         await player_info.finish(Message(f"查询失败！\n用法错误！\n请输入【帮助 玩家信息】获取该功能更多信息"))
+
+
+player_inventory = on_command(f"玩家背包")
+
+
+@player_inventory.handle()
+async def player_inventory_handle(bot: Bot, event: GroupMessageEvent):
+    text = event.get_plaintext().split(" ")
+    if (len(text) == 3) or (len(text) == 2):
+        if len(text) == 3:
+            num = text[1]
+            name = text[2]
+        elif len(text) == 2:
+            num = text[1]
+            name = event.get_user_id()
+        else:
+            await player_inventory.finish(Message(f"查询失败！\n用法错误！\n请输入【帮助 玩家背包】获取该功能更多信息"))
+        result, server_info = utils.server.GetInfo.by_id(int(num))
+        if result:
+            server = models.server.Connect(server_info[2], server_info[3], server_info[4])
+            result, response = server.player_inventory(name)
+            if not result:
+                if isinstance(response, str):
+                    await player_inventory.finish(Message(f"查询失败！\n{response}"))
+                elif response["status"] == "500":
+                    result, player_info = utils.whitelist.GetInfo.by_qq(name)
+                    if result:
+                        result, response = server.player_inventory(player_info[2])
+                        name = player_info[2]
+                    else:
+                        await player_inventory.finish(Message(f"查询失败！\n不存在此玩家"))
+                else:
+                    await player_inventory.finish(Message(f"查询失败！\n{response['error']}"))
+            if result:
+                inventory = []
+                for i in response["response"]:
+                    inventory.append([i["netID"], i["stack"]])
+                bg = Image.open("img/inventory_bg.png").convert("RGBA")
+
+                # 背包 0-49
+                row = 0
+                column = 0
+                for i in inventory[:50]:
+                    if int(i[0]) < 0:
+                        row += 1
+                        continue
+                    item = Image.open(f"img/item/Item_{i[0]}.png").convert("RGBA")
+                    img = Image.new("RGBA", (50, 50), (0, 0, 0, 0))
+                    img.paste(item, (round((50 - item.width) / 2), round((50 - item.height) / 2)))
+                    img = img.resize((round(img.width * 1.5), (round(img.height * 1.5))))
+                    ft = ImageFont.truetype(font="font/JetBrainsMono-Bold-Italic.ttf", size=20)
+                    draw = ImageDraw.Draw(img)
+                    if i[1] != 1 and i[1] != 0:
+                        draw.text((40, 40), str(i[1]), font=ft)
+                    r, g, b, a = img.split()
+                    bg.paste(img, (33 + row * 79, 5 + column * 79), mask=a)
+                    if row == 9:
+                        row = 0
+                        column += 1
+                    else:
+                        row += 1
+
+                # 金币 50-53
+                column = 0
+                for i in inventory[50:54]:
+                    item = Image.open(f"img/item/Item_{i[0]}.png").convert("RGBA")
+                    img = Image.new("RGBA", (40, 40), (0, 0, 0, 0))
+                    img.paste(item, (round((40 - item.width) / 2), round((40 - item.height) / 2)))
+                    img = img.resize((round(img.width * 1.5), (round(img.height * 1.5))))
+                    ft = ImageFont.truetype(font="font/JetBrainsMono-Bold-Italic.ttf", size=15)
+                    draw = ImageDraw.Draw(img)
+                    if i[1] != 1 and i[1] != 0:
+                        draw.text((30, 30), str(i[1]), font=ft)
+                    r, g, b, a = img.split()
+                    bg.paste(img, (820, 140 + column * 55), mask=a)
+                    column += 1
+
+                # 弹药 54-57
+                column = 0
+                for i in inventory[54:58]:
+                    item = Image.open(f"img/item/Item_{i[0]}.png").convert("RGBA")
+                    img = Image.new("RGBA", (40, 40), (0, 0, 0, 0))
+                    img.paste(item, (round((40 - item.width) / 2), round((40 - item.height) / 2)))
+                    img = img.resize((round(img.width * 1.5), (round(img.height * 1.5))))
+                    ft = ImageFont.truetype(font="font/JetBrainsMono-Bold-Italic.ttf", size=15)
+                    draw = ImageDraw.Draw(img)
+                    if i[1] != 1 and i[1] != 0:
+                        draw.text((30, 30), str(i[1]), font=ft)
+                    r, g, b, a = img.split()
+                    bg.paste(img, (882, 140 + column * 55), mask=a)
+                    column += 1
+
+                # 垃圾桶 58
+                for i in inventory[58:59]:
+                    item = Image.open(f"img/item/Item_{i[0]}.png").convert("RGBA")
+                    img = Image.new("RGBA", (50, 50), (0, 0, 0, 0))
+                    img.paste(item, (round((50 - item.width) / 2), round((50 - item.height) / 2)))
+                    img = img.resize((round(img.width * 1.5), (round(img.height * 1.5))))
+                    ft = ImageFont.truetype(font="font/JetBrainsMono-Bold-Italic.ttf", size=20)
+                    draw = ImageDraw.Draw(img)
+                    if i[1] != 1 and i[1] != 0:
+                        draw.text((40, 40), str(i[1]), font=ft)
+                    r, g, b, a = img.split()
+                    bg.paste(img, (745, 400), mask=a)
+
+                # 护甲 59 - 61
+                column = 0
+                for i in inventory[59:62]:
+                    item = Image.open(f"img/item/Item_{i[0]}.png").convert("RGBA")
+                    img = Image.new("RGBA", (50, 50), (0, 0, 0, 0))
+                    img.paste(item, (round((50 - item.width) / 2), round((50 - item.height) / 2)))
+                    img = img.resize((round(img.width * 1.5), (round(img.height * 1.5))))
+                    ft = ImageFont.truetype(font="font/JetBrainsMono-Bold-Italic.ttf", size=20)
+                    draw = ImageDraw.Draw(img)
+                    if i[1] != 1 and i[1] != 0:
+                        draw.text((40, 40), str(i[1]), font=ft)
+                    r, g, b, a = img.split()
+                    bg.paste(img, (1115, 65 + column * 79), mask=a)
+                    column += 1
+
+                # 饰品 62 - 68
+                column = 0
+                for i in inventory[62:69]:
+                    item = Image.open(f"img/item/Item_{i[0]}.png").convert("RGBA")
+                    img = Image.new("RGBA", (50, 50), (0, 0, 0, 0))
+                    img.paste(item, (round((50 - item.width) / 2), round((50 - item.height) / 2)))
+                    img = img.resize((round(img.width * 1.5), (round(img.height * 1.5))))
+                    ft = ImageFont.truetype(font="font/JetBrainsMono-Bold-Italic.ttf", size=20)
+                    draw = ImageDraw.Draw(img)
+                    if i[1] != 1 and i[1] != 0:
+                        draw.text((40, 40), str(i[1]), font=ft)
+                    r, g, b, a = img.split()
+                    bg.paste(img, (1115, 310 + column * 79), mask=a)
+                    column += 1
+
+                # 护甲装饰 69 - 71
+                column = 0
+                for i in inventory[69:72]:
+                    item = Image.open(f"img/item/Item_{i[0]}.png").convert("RGBA")
+                    img = Image.new("RGBA", (50, 50), (0, 0, 0, 0))
+                    img.paste(item, (round((50 - item.width) / 2), round((50 - item.height) / 2)))
+                    img = img.resize((round(img.width * 1.5), (round(img.height * 1.5))))
+                    ft = ImageFont.truetype(font="font/JetBrainsMono-Bold-Italic.ttf", size=20)
+                    draw = ImageDraw.Draw(img)
+                    if i[1] != 1 and i[1] != 0:
+                        draw.text((40, 40), str(i[1]), font=ft)
+                    r, g, b, a = img.split()
+                    bg.paste(img, (1035, 65 + column * 79), mask=a)
+                    column += 1
+
+                # 饰品装饰 72 - 78
+                column = 0
+                for i in inventory[72:79]:
+                    item = Image.open(f"img/item/Item_{i[0]}.png").convert("RGBA")
+                    img = Image.new("RGBA", (50, 50), (0, 0, 0, 0))
+                    img.paste(item, (round((50 - item.width) / 2), round((50 - item.height) / 2)))
+                    img = img.resize((round(img.width * 1.5), (round(img.height * 1.5))))
+                    ft = ImageFont.truetype(font="font/JetBrainsMono-Bold-Italic.ttf", size=20)
+                    draw = ImageDraw.Draw(img)
+                    if i[1] != 1 and i[1] != 0:
+                        draw.text((40, 40), str(i[1]), font=ft)
+                    r, g, b, a = img.split()
+                    bg.paste(img, (1035, 310 + column * 79), mask=a)
+                    column += 1
+
+                ft = ImageFont.truetype(font="font/Alibaba-PuHuiTi-Light.otf", size=50)
+                draw = ImageDraw.Draw(bg)
+                draw.text((150, 450), f"{server_info[1]}\nQQ群：{event.group_id}\n玩家昵称：{name}", font=ft)
+                ft = ImageFont.truetype(font="font/Alibaba-PuHuiTi-Light.otf", size=20)
+                draw.text((10, 680), "Developed by Qianyi", font=ft)
+                draw.text((210, 680), time.strftime("%Y-%m-%d %H:%M:%S", time.localtime()), font=ft)
+                bg.save("img/inventory.png", format="PNG")
+                await player_inventory.finish(Message(MessageSegment.image("file://" + os.getcwd() + "/img/inventory.png")))
+            else:
+                if isinstance(response, str):
+                    await player_inventory.finish(Message(f"查询失败！\n{response}"))
+                elif response["status"] == "500":
+                    await player_inventory.finish(Message(f"查询失败！\n不存在此玩家"))
+                else:
+                    await player_inventory.finish(Message(f"查询失败！\n{response['error']}"))
+        else:
+            await player_inventory.finish(Message(f"查询失败！\n找不到序号为 {num} 的服务器"))
+    else:
+        await player_inventory.finish(Message(f"查询失败！\n用法错误！\n请输入【帮助 玩家背包】获取该功能更多信息"))

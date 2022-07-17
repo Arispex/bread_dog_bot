@@ -147,3 +147,38 @@ class Connect:
                 return False, self.status["error"]
             except TypeError:
                 return False, "无法连接至服务器"
+
+    def player_inventory(self, name: str):
+        """
+        获取指定玩家的库存
+        :param name: 玩家名称
+        :return: 获取结果 成功返回[True, 玩家背包信息] 失败返回[False, 失败原因]
+        """
+        if self.status_code:
+            result, execute_result = utils.RESTAPI.Player.inventory(self.ip, self.port, self.token, name)
+            if result:
+                return True, execute_result
+            else:
+                return False, execute_result
+        else:
+            try:
+                return False, self.status["error"]
+            except TypeError:
+                return False, "无法连接至服务器"
+
+    def progress(self):
+        """
+        获取服务器进度（Boss是否被击败）
+        :return: 获取结果 成功返回[True, 服务器进度] 失败返回[False, 失败原因]
+        """
+        if self.status_code:
+            result, execute_result = utils.RESTAPI.World.progress(self.ip, self.port, self.token)
+            if result:
+                return True, execute_result
+            else:
+                return False, execute_result
+        else:
+            try:
+                return False, self.status["error"]
+            except TypeError:
+                return False, "无法连接至服务器"
