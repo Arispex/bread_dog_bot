@@ -139,7 +139,10 @@ async def world_progress_handle(bot: Bot, event: Event):
                         row += 1
 
                 img.save("img/progress.png")
-                await world_progress.finish(MessageSegment.image("file://" + os.getcwd() + "/img/progress.png"))
+                if os.name == "nt":  # windows
+                    await world_progress.finish(MessageSegment.image("file:///" + os.getcwd() + "\\img\\progress.png"))
+                else:  # linux
+                    await world_progress.finish(MessageSegment.image("file://" + os.getcwd() + "/img/progress.png"))
             else:
                 await world_progress.finish(f"查询失败！\n{progress}")
         else:

@@ -100,4 +100,7 @@ async def admin_list_handle(bot: Bot, event: GroupMessageEvent):
             row += 1
 
     img.save("img/admin_list.png")
-    await admin_list.finish(Message(MessageSegment.image("file://" + os.getcwd() + "/img/admin_list.png")))
+    if os.name == "nt":  # windows
+        await admin_list.finish(MessageSegment.image("file:///" + os.getcwd() + "\\img\\progress.png"))
+    else:  # linux
+        await admin_list.finish(Message(MessageSegment.image("file://" + os.getcwd() + "/img/admin_list.png")))

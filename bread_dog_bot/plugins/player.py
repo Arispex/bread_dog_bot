@@ -320,7 +320,12 @@ async def player_inventory_handle(bot: Bot, event: GroupMessageEvent):
                 draw.text((10, 680), "Developed by Qianyi", font=ft)
                 draw.text((210, 680), time.strftime("%Y-%m-%d %H:%M:%S", time.localtime()), font=ft)
                 bg.save("img/inventory.png", format="PNG")
-                await player_inventory.finish(Message(MessageSegment.image("file://" + os.getcwd() + "/img/inventory.png")))
+                if os.name == "nt":  # windows
+                    await player_inventory.finish(
+                        MessageSegment.image("file:///" + os.getcwd() + "\\img\\progress.png"))
+                else:  # linux
+                    await player_inventory.finish(
+                        Message(MessageSegment.image("file://" + os.getcwd() + "/img/inventory.png")))
             else:
                 if isinstance(response, str):
                     await player_inventory.finish(Message(f"查询失败！\n{response}"))
