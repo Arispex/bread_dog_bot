@@ -47,6 +47,8 @@ admin_list = on_command("管理员列表")
 @admin_list.handle()
 async def admin_list_handle(bot: Bot, event: GroupMessageEvent):
     admins = utils.admin.get()
+    if admins[0] == "" or not admins:
+        await admin_list.finish("群主很懒，还没有添加任何管理员")
     admin_info_list = []
     group_info = await bot.get_group_info(group_id=event.group_id)
     for i in admins:
@@ -101,6 +103,6 @@ async def admin_list_handle(bot: Bot, event: GroupMessageEvent):
 
     img.save("img/admin_list.png")
     if os.name == "nt":  # windows
-        await admin_list.finish(MessageSegment.image("file:///" + os.getcwd() + "\\img\\progress.png"))
+        await admin_list.finish(MessageSegment.image("file:///" + os.getcwd() + "\\img\\admin_list.png"))
     else:  # linux
         await admin_list.finish(Message(MessageSegment.image("file://" + os.getcwd() + "/img/admin_list.png")))

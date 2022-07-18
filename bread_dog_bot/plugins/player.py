@@ -322,7 +322,7 @@ async def player_inventory_handle(bot: Bot, event: GroupMessageEvent):
                 bg.save("img/inventory.png", format="PNG")
                 if os.name == "nt":  # windows
                     await player_inventory.finish(
-                        MessageSegment.image("file:///" + os.getcwd() + "\\img\\progress.png"))
+                        MessageSegment.image("file:///" + os.getcwd() + "\\img\\inventory.png"))
                 else:  # linux
                     await player_inventory.finish(
                         Message(MessageSegment.image("file://" + os.getcwd() + "/img/inventory.png")))

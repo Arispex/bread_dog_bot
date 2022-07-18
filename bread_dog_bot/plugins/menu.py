@@ -209,8 +209,8 @@ async def about_handle(bot: Bot, event: Event):
         "———关于———\n"
         "bread dog bot\n"
         "一个高度可自定义化的 Terraria TShock Bot\n"
-        "版本: 1.4.0\n"
-        "更新时间: 2022/07/17\n"
+        "版本: 1.4.2\n"
+        "更新时间: 2022/07/18\n"
         "作者: 千亦\n"
         "Github: https://github.com/Qianyiovo/breadDogBot"
     ))
