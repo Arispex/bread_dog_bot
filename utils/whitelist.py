@@ -82,10 +82,7 @@ def add_to_server(ip: str, port: str, token: str, name: str):
         else:
             return False, command_output["response"][0]
     else:
-        try:
-            return False, command_output["error"]
-        except TypeError:
-            return False, command_output
+        return False, command_output
 
 
 def add_to_db(qq: str, name: str):
@@ -114,15 +111,12 @@ def delete_from_server(ip: str, port: str, token: str, name: str):
     command = f"/bwl del {name}"
     result, command_output = utils.RESTAPI.V3.Server.rawcmd(ip, port, token, command)
     if result:
-        if command_output["response"][0] == "删除成功！":
+        if command_output["response"][0] == "删除成功!":
             return True, None
         else:
             return False, command_output["response"][0]
     else:
-        try:
-            return False, command_output["error"]
-        except TypeError:
-            return False, command_output
+        return False, command_output
 
 
 def delete_from_db(qq: str):

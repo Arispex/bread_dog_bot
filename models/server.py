@@ -45,10 +45,7 @@ class Connect:
 
             return True, result
         else:
-            try:
-                return False, self.status["error"]
-            except TypeError:
-                return False, "无法连接至服务器"
+            return False, self.error
 
     def remote_command(self, command: str):
         """
@@ -63,10 +60,7 @@ class Connect:
             else:
                 return False, execute_result
         else:
-            try:
-                return False, self.status["error"]
-            except TypeError:
-                return False, "无法连接至服务器"
+            return False, self.error
 
     def add_whitelist(self, qq: str, name: str):
         """
@@ -83,7 +77,9 @@ class Connect:
                 if result:
                     return True, None
                 else:
-                    return False, "你已经添加过白名单了"
+                    if reason == "添加失败! 该玩家已经在白名单中":
+                        reason = "您已经添加过白名单了"
+                    return False, reason
             else:
                 # 如果玩家不存在于白名单中
                 result, reason = utils.whitelist.add_to_server(self.ip, self.port, self.token, name)
@@ -96,10 +92,7 @@ class Connect:
                 else:
                     return False, reason
         else:
-            try:
-                return False, self.status["error"]
-            except TypeError:
-                return False, "无法连接至服务器"
+            return False, self.error
 
     def delete_whitelist(self, qq: str):
         """
@@ -124,10 +117,7 @@ class Connect:
                 # 如果玩家不存在于白名单中
                 return False, player_info
         else:
-            try:
-                return False, self.status["error"]
-            except TypeError:
-                return False, "无法连接至服务器"
+            return False, self.error
 
     def say(self, content: str):
         """
@@ -143,14 +133,12 @@ class Connect:
             else:
                 return False, execute_result
         else:
-            try:
-                return False, self.status["error"]
-            except TypeError:
-                return False, "无法连接至服务器"
+            return False, self.error
 
     def player_inventory(self, name: str):
         """
         获取指定玩家的库存
+        该功能需要服务器插件 REST API Extensions 否则无法使用
         :param name: 玩家名称
         :return: 获取结果 成功返回[True, 玩家背包信息] 失败返回[False, 失败原因]
         """
@@ -161,14 +149,12 @@ class Connect:
             else:
                 return False, execute_result
         else:
-            try:
-                return False, self.status["error"]
-            except TypeError:
-                return False, "无法连接至服务器"
+            return False, self.error
 
     def progress(self):
         """
         获取服务器进度（Boss是否被击败）
+        该功能需要服务器插件 REST API Extensions 否则无法使用
         :return: 获取结果 成功返回[True, 服务器进度] 失败返回[False, 失败原因]
         """
         if self.status_code:
@@ -178,7 +164,4 @@ class Connect:
             else:
                 return False, execute_result
         else:
-            try:
-                return False, self.status["error"]
-            except TypeError:
-                return False, "无法连接至服务器"
+            return False, self.error

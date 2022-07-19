@@ -150,6 +150,7 @@ async def player_info_handle(bot: Bot, event: Event):
         await player_info.finish(Message(f"查询失败！\n用法错误！\n请输入【帮助 玩家信息】获取该功能更多信息"))
 
 
+# 该功能不适配TShock Terraria1.4.0.5版本 仅支持泰拉瑞亚TShock Terraria1.4.3.2及以上版本
 player_inventory = on_command(f"玩家背包")
 
 

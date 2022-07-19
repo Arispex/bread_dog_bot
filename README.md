@@ -9,6 +9,38 @@
 ## Nonebot2
 非常 [ NICE ](https://github.com/nonebot/nonebot2) 的OneBot框架
 
+## 适配版本
+支持TShock Terraria 1.4.0.5+
+
+推荐使用TShock Terraria 1.4.3.2+
+
+TShock Terraria 1.4.3.2以下无法使用以下功能
++ 玩家背包
++ 进度
+
+## 插件
+部分功能需要插件支持
+
+所有插件都可以在项目[ServerPlugins](https://github.com/Qianyiovo/bread_dog_bot/tree/main/ServerPlugins)目录下找到
+
+下载前看清版本
+
+### REST API Extensions
+扩展了 REST API，可以获取玩家的背包、进度等信息
+
+以下功能需要安装此插件才能正常使用
++ 玩家背包
++ 进度
+
+### Better Whitelist
+提供了更好的白名单，可以通过玩家昵称来判断是否为白名单玩家
+
+以下功能需要安装此插件才能正常使用
++ 添加白名单
++ 删除白名单
++ 重置白名单列表
++ 玩家信息
+
 ## 功能
 
 ### 基础功能
@@ -48,133 +80,21 @@
 ## 安装
 
 ### Windows
+<video src="https://breaddogbot-1302721716.cos.ap-shanghai.myqcloud.com/tutorial.mp4"></video>
 
-#### 下载懒人包
-
-从[发布页面](https://github.com/Qianyiovo/bread_dog_bot/releases)下载最新版本
-
-解压下载的压缩包
-
-打开解压后的文件夹
-![](docs_image/img1.png)
-+ bread_dog_bot 机器人主程序
-+ go-cqhttp_windows_386 go-cqhttp用于登入QQ
-+ python-3.10.3.exe Python环境安装器
-
-#### 安装Python 环境
-
-双击打开 python-3.10.3.exe
-勾选 Add Python 3.10 to PATH
-点击 Install Now 开始安装Python环境
-![](docs_image/img2.png)
-Python环境安装完成
-![](docs_image/img3.png)
-
-#### 初始化环境
-双击打开 bread_dog_bot 文件夹中的 初始化.bat
-![](docs_image/img4.png)
-耐心等待初始化完成
-![](docs_image/img5.png)
-如果出现以下图片的情况
-![](docs_image/img6.png)
-就说明系统缺少必要依赖（visual C++ build tool)
-
-如果安装成功 贼会显示以下图片的情况
-![](docs_image/img13.png)
-
-##### 安装依赖(visual C++ build tool)
-第一次安装99%都会出现这个情况
-
-如果没有出现过以上图片的情况可跳过这一步
-
-由于文件过大 导致无法上传 大概有1.2G(为什么那么大)
-
-可前往QQ群：772721898 下载文件或直链下载
-
-依赖：www.miaovps.com/solved_packageMissInInstalling_mu_visual_cpp_build_tools_2015_update_3_x64_dvd_dfd9a39c.iso
-
-双击打开下载好的iso文件
-
-![](docs_image/img7.png)
-
-双击打开 VisualCppBuildTool_Full.exe
-![](docs_image/img8.png)
-
-耐心等待加载
-![](docs_image/img9.png)
-加载完成后
-
-点击 安装
-![](docs_image/img10.png)
-
-等待安装完成
-![](docs_image/img11.png)
-
-安装完成
-![](docs_image/img12.png)
-
-重复 初始化环境 步骤 重新初始化环境
-
-出现以下图片的情况说明安装成功
-![](docs_image/img13.png)
-
-环境安装到此结束
-
-#### 登入cq-http
-
-双击打开 go-cqhttp_windows_386 文件夹中的 go-cqhttp.bat
-
-不是 go-cqhttp.exe！
-
-不是 go-cqhttp.exe！！
-
-不是 go-cqhttp.exe！！！
-
-重要事情说三遍！！！！！
-![](docs_image/img14.png)
-扫描并登入QQ
-![](docs_image/img15.png)
-为什么无法登入？
-![](docs_image/img16.JPG)
-别急，这是腾讯的安全检测，你需要在本地中登入cq-http
-
-##### 本地登入cq-http
-把cq-http-windows-386文件夹复制到本地
-
-也就是复制到你的电脑上去
-![](docs_image/img17.png)
-
-复制到本地后双击打开 cq-http-windows-386 文件夹中的 cq-http.bat
-
-然后扫描二维码登入QQ
-
-就不会出现安全检测了
-
-登入后目录下会生成两个文件
-
-分别是 device.json 和 session.token
-![](docs_image/img18.png)
-
-把这两个文件复制到服务器上的cq-http文件夹中
-![](docs_image/img19.png)
-
-双击打开 go-cqhttp.bat
-出现以下情况就说明登入成功
-![](docs_image/img20.png)
-
-#### 启动机器人
-
-双击打开 bread_dog_bot 文件夹中的 bot.py
-
-第一次启动需要安装Chromium
-
-请耐心等待安装完成
-![](docs_image/img21.png)
-
+[依赖点我下载](www.miaovps.com/solved_packageMissInInstalling_mu_visual_cpp_build_tools_2015_update_3_x64_dvd_dfd9a39c.iso)
 ## Q&A
 
 
 ## 更新
+2022/07/19(v1.5)
++ 修复了在线无法发送消息提示风控
++ 修复了添加白名单无法发送消息提示风控
++ 完美适配TShock Terraria 1.4.3.2+
++ 适配TShock Terraria 1.4.0.5+（部分功能无法使用）
++ 修复了大部分功能反馈信息异常
++ 优化了部分功能消息
+
 2022/07/18(v1.4.2)
 + 修复了在Windows平台中图片发送错误
 + 修复了没有管理员时管理员列表不发送消息

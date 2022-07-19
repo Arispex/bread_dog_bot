@@ -25,6 +25,8 @@ async def online_players_handle(bot: Bot, event: Event):
             conn = models.server.Connect(i[2], i[3], i[4])
             result, player_list = conn.online_players()
             if result:
+                if not player_list:
+                    player_list.append("服务器一个人也没有，没准是服主跑路了")
                 msg.append(
                     f"๑{i[0]}๑{MessageSegment.face(190)}{i[1]}\n在线玩家({conn.playercount}/{conn.maxplayers})：\n" + ", ".join(
                         player_list))
@@ -51,7 +53,7 @@ async def server_list_handle(bot: Bot, event: Event):
             conn = models.server.Connect(i[2], i[3], i[4])
             if conn.status_code:
                 msg.append(
-                    f"๑{i[0]}๑{MessageSegment.face(190)}{i[1]}\nIP：{conn.ip}\n端口：{conn.server_port}")
+                    f"๑{i[0]}๑{MessageSegment.face(190)}{i[1]}\nIP：{conn.ip}\n端口：{conn.server_port}\n版本：{conn.serverversion}")
             else:
                 msg.append(
                     f"๑{i[0]}๑{MessageSegment.face(190)}{i[1]}\n{conn.error}")
@@ -62,6 +64,7 @@ async def server_list_handle(bot: Bot, event: Event):
     await server_list.finish(Message("\n".join(msg)))
 
 
+# 该功能不适配TShock Terraria1.4.0.5版本 仅支持泰拉瑞亚TShock Terraria1.4.3.2及以上版本
 world_progress = on_command("进度")
 
 
