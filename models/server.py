@@ -1,6 +1,6 @@
 import utils.RESTAPI
 import utils.whitelist
-
+import utils.text_handle
 
 class Connect:
     """
@@ -56,6 +56,12 @@ class Connect:
         if self.status_code:
             result, execute_result = utils.RESTAPI.V3.Server.rawcmd(self.ip, self.port, self.token, command)
             if result:
+                if not execute_result["response"]:
+                    return True, execute_result
+                index = 0
+                for i in execute_result["response"]:
+                    execute_result["response"][index] = utils.text_handle.Text.rm_color(i)
+                    index = index + 1
                 return True, execute_result
             else:
                 return False, execute_result
