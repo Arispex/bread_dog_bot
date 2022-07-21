@@ -1,0 +1,21 @@
+import re
+
+
+class Text:
+    def __init__(self):
+        pass
+
+    @staticmethod
+    def rm_color(text: str):
+        out_text = ""  # 输出
+        sp_list = text.split("]")  # 分割字符串,让列表一个元素最多只有一个颜色字符串
+        for i in sp_list:
+            i = i + "]"  # 补回原来的],列表最后一个元素会多出]
+            try:
+                # print("匹配到颜色字符串:", re.search("\[c/([0-9a-fA-F]){6}:(.*)\]", i).group())  # 调试用的
+                replace_word = re.search("\[c/([0-9a-fA-F]){6}:(.*)\]", i).group(2)  # 提取颜色字符串的 内容
+                handle_text = re.sub("\[c/([0-9a-fA-F]){6}:(.*)\]", replace_word, i)  # 将颜色字符串替换为内容
+                out_text = out_text + handle_text
+            except Exception:
+                out_text = out_text + i  # 没有找到颜色字符串时直接衔接字符串
+        return out_text[:-1]  # 处理最后多出的], 并返回处理好的字符串
