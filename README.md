@@ -93,7 +93,7 @@ TShock Terraria 1.4.3.2以下无法使用以下功能
 ### Windows
 [视频教程](https://breaddogbot-1302721716.cos.ap-shanghai.myqcloud.com/tutorial.mp4)
 
-[依赖点我下载](www.miaovps.com/solved_packageMissInInstalling_mu_visual_cpp_build_tools_2015_update_3_x64_dvd_dfd9a39c.iso)
+[依赖点我下载](https://www.miaovps.com/solved_packageMissInInstalling_mu_visual_cpp_build_tools_2015_update_3_x64_dvd_dfd9a39c.iso)
 ## Q&A
 
 
