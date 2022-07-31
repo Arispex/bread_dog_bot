@@ -15,7 +15,7 @@ async def menu_handle(bot: Bot, event: Event):
         f"{MessageSegment.face(147)}管理功能\n"
         f"{MessageSegment.face(147)}云黑功能\n"
         f"{MessageSegment.face(147)}抽奖功能\n"
-        f"{MessageSegment.face(147)}商店功能\n"
+        f"{MessageSegment.face(147)}邮箱功能\n"
         f"{MessageSegment.face(147)}排行榜功能\n"
         f"{MessageSegment.face(147)}关于"
     ))
@@ -159,12 +159,12 @@ async def lottery_handle(bot: Bot, event: Event):
     if num == 1:
         await lottery.finish(Message(
             "———抽奖功能———\n"
-            f"{MessageSegment.face(147)}敬请期待...\n"
+            f"{MessageSegment.face(147)}随机抽奖\n"
             f"当前页数：1/1\n"
         ))
 
 
-shop = on_command("商店功能")
+shop = on_command("邮箱功能")
 
 
 @shop.handle()
@@ -176,9 +176,20 @@ async def shop_handle(bot: Bot, event: Event):
         num = 1
     if num == 1:
         await shop.finish(Message(
-            "———商店功能———\n"
-            f"{MessageSegment.face(147)}敬请期待\n"
-            f"当前页数：1/1\n"
+            "———邮箱功能———\n"
+            f"{MessageSegment.face(147)}玩家邮箱\n"
+            f"{MessageSegment.face(147)}添加邮箱\n"
+            f"{MessageSegment.face(147)}删除邮箱\n"
+            f"{MessageSegment.face(147)}发送邮箱\n"
+            f"{MessageSegment.face(147)}领取邮箱\n"
+            f"当前页数：1/2\n"
+            f"输入 邮箱功能 2 查看下一页"
+        ))
+    elif num == 2:
+        await shop.finish(Message(
+            "———邮箱功能———\n"
+            f"{MessageSegment.face(147)}回收邮件\n"
+            f"当前页数：2/2\n"
         ))
 
 
@@ -209,7 +220,7 @@ async def about_handle(bot: Bot, event: Event):
         "———关于———\n"
         "bread dog bot\n"
         "一个高度可自定义化的 Terraria TShock Bot\n"
-        "版本: 1.5\n"
+        "版本: 1.6\n"
         "更新时间: 2022/07/19\n"
         "作者: 千亦\n"
         "Github: https://github.com/Qianyiovo/breadDogBot"

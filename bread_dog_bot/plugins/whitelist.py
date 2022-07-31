@@ -5,6 +5,8 @@ import models.server
 import utils.server
 import utils.admin
 import utils.whitelist
+import config
+
 
 add_whitelist = on_command("添加白名单")
 
@@ -13,23 +15,39 @@ add_whitelist = on_command("添加白名单")
 async def add_whitelist_handle(bot: Bot, event: Event):
     text = event.get_plaintext().split(" ")
     if len(text) == 2:
-        player_name = text[1]
-        result, server_info_list = utils.server.GetInfo.all()
-        msg = []
-        if result:
-            for i in server_info_list:
-                conn = models.server.Connect(i[2], i[3], i[4])
+        if config.Whitelist.method == "normal":  # 普通模式
+            player_name = text[1]
+            result, server_info_list = utils.server.GetInfo.all()
+            msg = []
+            if result:
+                for i in server_info_list:
+                    conn = models.server.Connect(i[2], i[3], i[4])
+                    result, reason = conn.add_whitelist(event.get_user_id(), player_name)
+                    if result:
+                        msg.append(f"๑{i[0]}๑{MessageSegment.face(190)}{i[1]}\n"
+                                   f"添加成功！")
+                    else:
+                        msg.append(f"๑{i[0]}๑{MessageSegment.face(190)}{i[1]}\n"
+                                   f"添加失败！\n"
+                                   f"{reason}")
+                await add_whitelist.finish(Message("\n".join(msg)))
+            else:
+                await add_whitelist.finish(Message("添加失败！\n无法连接至数据库"))
+        elif config.Whitelist.method == "cluster":  # 集群模式
+            main_server_id = config.Whitelist.main_server
+            player_name = text[1]
+            result, server_info = utils.server.GetInfo.by_id(main_server_id)
+            if result:
+                conn = models.server.Connect(server_info[2], server_info[3], server_info[4])
                 result, reason = conn.add_whitelist(event.get_user_id(), player_name)
                 if result:
-                    msg.append(f"๑{i[0]}๑{MessageSegment.face(190)}{i[1]}\n"
-                               f"添加成功！")
+                    await add_whitelist.finish("添加成功！")
                 else:
-                    msg.append(f"๑{i[0]}๑{MessageSegment.face(190)}{i[1]}\n"
-                               f"添加失败！\n"
-                               f"{reason}")
-            await add_whitelist.finish(Message("\n".join(msg)))
+                    await add_whitelist.finish("添加失败！\n" + reason)
+            else:
+                await add_whitelist.finish(Message("添加失败！\n无法连接至数据库"))
         else:
-            await add_whitelist.finish(Message("添加失败！\n无法连接至数据库"))
+            await add_whitelist.finish(Message("添加失败！\n未知的模式\n请在config.py中重新配置"))
     else:
         await add_whitelist.finish("添加失败！\n用法错误！\n请输入【帮助 添加白名单】获取该功能更多信息")
 
@@ -43,24 +61,39 @@ async def delete_whitelist_handle(bot: Bot, event: Event):
     if event.get_user_id() in admin_list:
         text = event.get_plaintext().split(" ")
         if len(text) == 2:
-            qq = text[1]
-            result, server_info_list = utils.server.GetInfo.all()
-            msg = []
-            if result:
-                for i in server_info_list:
-                    conn = models.server.Connect(i[2], i[3], i[4])
+            if config.Whitelist.method == "normal":  # 普通模式
+                qq = text[1]
+                result, server_info_list = utils.server.GetInfo.all()
+                msg = []
+                if result:
+                    for i in server_info_list:
+                        conn = models.server.Connect(i[2], i[3], i[4])
+                        result, reason = conn.delete_whitelist(qq)
+                        if result:
+                            msg.append(f"๑{i[0]}๑{MessageSegment.face(190)}{i[1]}\n"
+                                       f"删除成功！")
+                        else:
+                            msg.append(f"๑{i[0]}๑{MessageSegment.face(190)}{i[1]}\n"
+                                       f"删除失败！\n"
+                                       f"{reason}")
+                    await delete_whitelist.finish(Message("\n".join(msg)))
+                else:
+                    await delete_whitelist.finish(Message("删除失败！\n无法连接至数据库"))
+            elif config.Whitelist.method == "cluster":  # 集群模式
+                main_server_id = config.Whitelist.main_server
+                qq = text[1]
+                result, server_info = utils.server.GetInfo.by_id(main_server_id)
+                if result:
+                    conn = models.server.Connect(server_info[2], server_info[3], server_info[4])
                     result, reason = conn.delete_whitelist(qq)
                     if result:
-                        msg.append(f"๑{i[0]}๑{MessageSegment.face(190)}{i[1]}\n"
-                                   f"删除成功！")
+                        await delete_whitelist.finish("删除成功！")
                     else:
-                        msg.append(f"๑{i[0]}๑{MessageSegment.face(190)}{i[1]}\n"
-                                   f"删除失败！\n"
-                                   f"{reason}")
+                        await delete_whitelist.finish("删除失败！\n" + reason)
+                else:
+                    await delete_whitelist.finish(Message("删除失败！\n无法连接至数据库"))
             else:
-                await delete_whitelist.finish(Message("删除失败！\n无法连接至数据库"))
-
-            await delete_whitelist.finish(Message("\n".join(msg)))
+                await delete_whitelist.finish(Message("删除失败！\n未知的模式\n请在config.py中重新配置"))
         else:
             await delete_whitelist.finish("删除失败！\n用法错误！\n请输入【帮助 删除白名单】获取该功能更多信息")
 

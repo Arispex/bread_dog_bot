@@ -165,3 +165,24 @@ class Connect:
                 return False, execute_result
         else:
             return False, self.error
+
+    def give(self, player_name: str, item_id: int, amount: int):
+        """
+        给指定玩家物品
+        :return: 执行结果 成功返回[True, None] 失败返回[False, 失败原因]
+        :param amount: 物品数量
+        :param player_name: 玩家名称
+        :param item_id: 物品名称
+        """
+        if self.status_code:
+            command = f"/give {item_id} {player_name} {amount}"
+            result, execute_result = utils.RESTAPI.V3.Server.rawcmd(self.ip, self.port, self.token, command)
+            if result:
+                if execute_result["response"][0] == "Invalid player!":
+                    return False, "玩家不存在"
+                else:
+                    return True, None
+            else:
+                return False, execute_result
+        else:
+            return False, self.error
