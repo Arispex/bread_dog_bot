@@ -293,7 +293,7 @@ async def help_handle(bot: Bot, event: Event):
                               "参数：\n"
                               "QQ/昵称 - 指定玩家的QQ或昵称 可选参数 不填则查询自己 \n")
         elif command == "添加邮件":
-            await help.finish("——进度——\n"
+            await help.finish("——添加邮件——\n"
                               "权限：\n"
                               "管理员\n"
                               "介绍：\n"
@@ -350,7 +350,7 @@ async def help_handle(bot: Bot, event: Event):
                               "参数：\n"
                               "次数 - 抽奖的次数\n")
         elif command == "回收邮件":
-            await help.finish("——随机抽奖——\n"
+            await help.finish("——回收邮件——\n"
                               "权限：\n"
                               "无\n"
                               "介绍：\n"

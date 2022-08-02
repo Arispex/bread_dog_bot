@@ -178,10 +178,10 @@ async def shop_handle(bot: Bot, event: Event):
         await shop.finish(Message(
             "———邮箱功能———\n"
             f"{MessageSegment.face(147)}玩家邮箱\n"
-            f"{MessageSegment.face(147)}添加邮箱\n"
-            f"{MessageSegment.face(147)}删除邮箱\n"
-            f"{MessageSegment.face(147)}发送邮箱\n"
-            f"{MessageSegment.face(147)}领取邮箱\n"
+            f"{MessageSegment.face(147)}添加邮件\n"
+            f"{MessageSegment.face(147)}删除邮件\n"
+            f"{MessageSegment.face(147)}发送邮件\n"
+            f"{MessageSegment.face(147)}领取邮件\n"
             f"当前页数：1/2\n"
             f"输入 邮箱功能 2 查看下一页"
         ))
@@ -220,8 +220,8 @@ async def about_handle(bot: Bot, event: Event):
         "———关于———\n"
         "bread dog bot\n"
         "一个高度可自定义化的 Terraria TShock Bot\n"
-        "版本: 1.6\n"
-        "更新时间: 2022/07/19\n"
+        "版本: 1.6.2\n"
+        "更新时间: 2022/08/02\n"
         "作者: 千亦\n"
         "Github: https://github.com/Qianyiovo/breadDogBot"
     ))
