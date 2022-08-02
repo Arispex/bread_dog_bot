@@ -20,7 +20,7 @@ def random_lottery(qq: str, count: int = 1):
 
             result = []
 
-            with open("item.json", "r") as f:
+            with open("item.json", "r", encoding="utf-8") as f:
                 items = json.load(f)
 
             for i in range(count):
