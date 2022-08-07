@@ -29,7 +29,6 @@ nonebot-adapter-onebot==2.1.1
 nonebot2==2.0.0b4
 Pillow==9.1.1
 pipreqs==0.4.11
-playwright==1.22.0
 poyo==0.5.0
 prompt-toolkit==3.0.30
 pydantic==1.9.1
