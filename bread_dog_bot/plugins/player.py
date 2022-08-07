@@ -157,10 +157,13 @@ player_inventory = on_command(f"玩家背包")
 @player_inventory.handle()
 async def player_inventory_handle(bot: Bot, event: GroupMessageEvent):
     text = event.get_plaintext().split(" ")
-    if (len(text) == 3) or (len(text) == 2):
+    if (len(text) >= 2):
         if len(text) == 3:
             num = text[1]
             name = text[2]
+        elif len(text) > 3 and "\"" in text[2]:# 判断加上引号的带空格的名字
+            num = text[1]
+            name = event.get_plaintext().split("\"")[1] # 用引号分割, 取名字
         elif len(text) == 2:
             num = text[1]
             name = event.get_user_id()
