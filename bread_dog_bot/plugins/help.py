@@ -121,7 +121,6 @@ async def help_handle(bot: Bot, event: Event):
                               "无\n"
                               "介绍：\n"
                               "获取服务器列表的所有服务器并显示IP和端口\n"
-                              "下划线(_)代替空格\n"
                               "用法：\n"
                               "服务器列表\n"
                               "参数：\n"
@@ -133,7 +132,7 @@ async def help_handle(bot: Bot, event: Event):
                               "介绍：\n"
                               "发送消息至服务器\n"
                               "用法：\n"
-                              "发送消息 [序号] [内容]\n"
+                              "发送 [序号] [内容]\n"
                               "参数：\n"
                               "序号 - 服务器序号\n"
                               "内容 - 要发送的消息内容")
@@ -143,10 +142,11 @@ async def help_handle(bot: Bot, event: Event):
                               "无\n"
                               "介绍：\n"
                               "查看本群的机器人的管理员\n"
+                              "一页最多显示20个\n"
                               "用法：\n"
-                              "管理员列表\n"
+                              "管理员列表 [页数]\n"
                               "参数：\n"
-                              "无")
+                              "页数 - 查看的页数，可选参数，默认为1")
         elif command == "重置白名单":
             await help.finish("——重置白名单——\n"
                               "权限：\n"
@@ -344,11 +344,11 @@ async def help_handle(bot: Bot, event: Event):
                               "无\n"
                               "介绍：\n"
                               "随机抽奖 奖品直接发送至邮件\n"
-                              f"每次抽奖需要{config.Lottery.RandomLottery.cost_money}{config.Currency.name}"
+                              f"每次抽奖需要{config.Lottery.RandomLottery.cost_money}{config.Currency.name}\n"
                               "用法：\n"
                               "随机抽奖 [次数]\n"
                               "参数：\n"
-                              "次数 - 抽奖的次数\n")
+                              "次数 - 抽奖的次数")
         elif command == "回收邮件":
             await help.finish("——回收邮件——\n"
                               "权限：\n"
@@ -359,5 +359,83 @@ async def help_handle(bot: Bot, event: Event):
                               "回收邮件 [邮件序号]\n"
                               "参数：\n"
                               "邮件序号 - 邮件(物品)序号\n")
+        elif command == "奖池列表":
+            await help.finish("——奖池列表——\n"
+                              "权限：\n"
+                              "无\n"
+                              "介绍：\n"
+                              f"查看所有奖池\n"
+                              "用法：\n"
+                              "奖池列表\n"
+                              "参数：\n"
+                              "无")
+        elif command == "奖池":
+            await help.finish("——奖池——\n"
+                              "权限：\n"
+                              "无\n"
+                              "介绍：\n"
+                              f"获取奖池内容\n"
+                              "用法：\n"
+                              "奖池 [序号]\n"
+                              "参数：\n"
+                              "序号 - 奖池序号")
+        elif command == "添加奖池":
+            await help.finish("——添加奖池——\n"
+                              "权限：\n"
+                              "管理员\n"
+                              "介绍：\n"
+                              f"添加指定奖池\n"
+                              "用法：\n"
+                              "添加奖池 [名称] [价格] [进度] [服务器ID]\n"
+                              "参数：\n"
+                              "名称 - 奖池名称\n"
+                              "价格 - 单次抽奖价格\n"
+                              "进度 - 服务器进度限制\n"
+                              "服务器ID - 进度参考服务器ID")
+        elif command == "删除奖池":
+            await help.finish("——删除奖池——\n"
+                              "权限：\n"
+                              "管理员\n"
+                              "介绍：\n"
+                              f"删除指定奖池\n"
+                              "用法：\n"
+                              "奖池 [序号]\n"
+                              "参数：\n"
+                              "序号 - 奖池序号")
+        elif command == "添加奖池物品":
+            await help.finish("——添加奖池物品——\n"
+                              "权限：\n"
+                              "管理员\n"
+                              "介绍：\n"
+                              f"添加指定奖池物品\n"
+                              "用法：\n"
+                              "添加奖池物品 [序号] [物品ID] [最大数量] [最小数量] [概率]\n"
+                              "参数：\n"
+                              "序号 - 奖池序号\n"
+                              "物品ID - 物品ID\n"
+                              "最大数量 - 获得最大数量\n"
+                              "最小数量 - 获得最小数量\n"
+                              "概率 - 内部概率")
+        elif command == "删除奖池物品":
+            await help.finish("——删除奖池物品——\n"
+                              "权限：\n"
+                              "管理员\n"
+                              "介绍：\n"
+                              f"删除指定奖池物品\n"
+                              "用法：\n"
+                              "删除奖池物品 [序号]\n"
+                              "参数：\n"
+                              "序号 - 奖池物品序号")
+        elif command == "奖池抽奖":
+            await help.finish("——奖池抽奖——\n"
+                              "权限：\n"
+                              "无\n"
+                              "介绍：\n"
+                              f"指定奖池抽奖\n"
+                              "用法：\n"
+                              "奖池抽奖 [序号] [次数]\n"
+                              "参数：\n"
+                              "序号 - 奖池物品\n"
+                              "次数 - 抽奖次数")
     else:
         await help.finish("执行失败，用法错误\n请输入【帮助 帮助】 获取该功能更多信息")

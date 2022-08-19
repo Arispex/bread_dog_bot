@@ -160,7 +160,20 @@ async def lottery_handle(bot: Bot, event: Event):
         await lottery.finish(Message(
             "———抽奖功能———\n"
             f"{MessageSegment.face(147)}随机抽奖\n"
-            f"当前页数：1/1\n"
+            f"{MessageSegment.face(147)}奖池列表\n"
+            f"{MessageSegment.face(147)}奖池\n"
+            f"{MessageSegment.face(147)}添加奖池\n"
+            f"{MessageSegment.face(147)}删除奖池\n"
+            f"当前页数：1/2\n"
+            f"输入 抽奖功能 2 查看下一页"
+        ))
+    elif num == 2:
+        await lottery.finish(Message(
+            "———抽奖功能———\n"
+            f"{MessageSegment.face(147)}添加奖池物品\n"
+            f"{MessageSegment.face(147)}删除奖池物品\n"
+            f"{MessageSegment.face(147)}奖池抽奖\n"
+            f"当前页数：2/2"
         ))
 
 
@@ -220,8 +233,10 @@ async def about_handle(bot: Bot, event: Event):
         "———关于———\n"
         "bread dog bot\n"
         "一个高度可自定义化的 Terraria TShock Bot\n"
-        "版本: 1.6.3\n"
-        "更新时间: 2022/08/02\n"
+        "版本: 1.7\n"
+        "更新时间: 2022/08/19\n"
         "作者: 千亦\n"
-        "Github: https://github.com/Qianyiovo/breadDogBot"
+        "Github: https://github.com/Qianyiovo/breadDogBot\n"
+        "License: GPLv3\n"
+        "Copyright © 2022-present Qianyiovo\n"
     ))

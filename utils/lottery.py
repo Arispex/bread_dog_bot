@@ -2,9 +2,15 @@ import random
 import config
 import json
 import models.player
+import models.prize_pool
 
 
 def random_lottery(qq: str, count: int = 1):
+    """
+    随机抽奖
+    :param qq: 玩家QQ
+    :param count: 抽奖次数
+    """
     enable = config.Lottery.RandomLottery.enable
     if enable:
         if count < 1 or count > 10:
@@ -30,8 +36,6 @@ def random_lottery(qq: str, count: int = 1):
                 item_name = items[item_id - 1][1]
 
                 result.append([item_id, item_count, item_name])
-
-            player.sub_money(cost_money)
 
             return True, result
         else:

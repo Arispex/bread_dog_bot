@@ -1,5 +1,5 @@
 from nonebot import on_command
-from nonebot.adapters.onebot.v11 import Bot, Event, MessageSegment, Message
+from nonebot.adapters.onebot.v11 import Bot, Event, MessageSegment, Message, GroupMessageEvent
 from nonebot.permission import SUPERUSER
 import models.server
 import models.server
@@ -17,6 +17,13 @@ async def remote_command_handle(bot: Bot, event: Event):
             text = event.get_plaintext().split(" ")
             id = text[1]
             command = " ".join(text[2:])
+
+            if not id.isdigit():
+                await remote_command.finish("执行失败！\n无效的参数\n服务器序号必须为数字")
+
+            if not command.startswith("/"):
+                await remote_command.finish("执行失败！\n无效的参数\n命令必须以/开头")
+
             result, server_info = utils.server.GetInfo.by_id(int(id))
             if result:
                 conn = models.server.Connect(server_info[2], server_info[3], server_info[4])
@@ -39,12 +46,18 @@ say = on_command("发送")
 
 
 @say.handle()
-async def say_handle(bot: Bot, event: Event):
+async def say_handle(bot: Bot, event: GroupMessageEvent):
     text = event.get_plaintext().split(" ")
     if len(text) == 3:
         id = text[1]
         content = text[2]
+
+        if not id.isdigit():
+            await say.finish("发送失败！\n无效的参数\n服务器序号必须为数字")
+
         result, server_info = utils.server.GetInfo.by_id(int(id))
+        member_info = await bot.get_group_member_info(group_id=event.group_id, user_id=int(event.get_user_id()))
+        content = f"{member_info['nickname']}({member_info['user_id']})：{content}"
         if result:
             conn = models.server.Connect(server_info[2], server_info[3], server_info[4])
             result, reason = conn.say(content)

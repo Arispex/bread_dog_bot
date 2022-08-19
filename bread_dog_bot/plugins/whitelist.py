@@ -17,6 +17,8 @@ async def add_whitelist_handle(bot: Bot, event: Event):
     if len(text) == 2:
         if config.Whitelist.method == "normal":  # 普通模式
             player_name = text[1]
+            if not player_name.isalnum():
+                await add_whitelist.finish("添加失败！\n不合法的名称\n名称只能包含中文字母数字")
             result, server_info_list = utils.server.GetInfo.all()
             msg = []
             if result:

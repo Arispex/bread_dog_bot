@@ -1,7 +1,7 @@
 import os
 
 from nonebot import on_command
-from nonebot.adapters.onebot.v11 import Bot, Event, MessageSegment, Message
+from nonebot.adapters.onebot.v11 import Bot, Event, MessageSegment, Message, GroupMessageEvent
 import models.server
 import models.server
 import utils.admin
@@ -15,28 +15,29 @@ online_players = on_command("在线")
 
 @online_players.handle()
 async def online_players_handle(bot: Bot, event: Event):
-    result, server_info_list = utils.server.GetInfo.all()
-    msg = []
-    if result:
-        if not server_info_list:
-            msg.append("群主很懒，没有添加任何服务器！")
+    if event.get_plaintext() == "在线":
+        result, server_info_list = utils.server.GetInfo.all()
+        msg = []
+        if result:
+            if not server_info_list:
+                msg.append("群主很懒，没有添加任何服务器！")
 
-        for i in server_info_list:
-            conn = models.server.Connect(i[2], i[3], i[4])
-            result, player_list = conn.online_players()
-            if result:
-                if not player_list:
-                    player_list.append("服务器一个人也没有，没准是服主跑路了")
-                msg.append(
-                    f"๑{i[0]}๑{MessageSegment.face(190)}{i[1]}\n在线玩家({conn.playercount}/{conn.maxplayers})：\n" + ", ".join(
-                        player_list))
-            else:
-                msg.append(
-                    f"๑{i[0]}๑{MessageSegment.face(190)}{i[1]}\n{conn.error}")
-    else:
-        msg.append(
-            f"{server_info_list}")
-    await online_players.finish(Message("\n".join(msg)))
+            for i in server_info_list:
+                conn = models.server.Connect(i[2], i[3], i[4])
+                result, player_list = conn.online_players()
+                if result:
+                    if not player_list:
+                        player_list.append("服务器一个人也没有，没准是服主跑路了")
+                    msg.append(
+                        f"๑{i[0]}๑{MessageSegment.face(190)}{i[1]}\n在线玩家({conn.playercount}/{conn.maxplayers})：\n" + ", ".join(
+                            player_list))
+                else:
+                    msg.append(
+                        f"๑{i[0]}๑{MessageSegment.face(190)}{i[1]}\n{conn.error}")
+        else:
+            msg.append(
+                f"{server_info_list}")
+        await online_players.finish(Message("\n".join(msg)))
 
 
 server_list = on_command("服务器列表")
@@ -44,24 +45,25 @@ server_list = on_command("服务器列表")
 
 @server_list.handle()
 async def server_list_handle(bot: Bot, event: Event):
-    result, server_info_list = utils.server.GetInfo.all()
-    msg = []
-    if result:
-        if not server_info_list:
-            msg.append("群主很懒，没有添加任何服务器！")
-        for i in server_info_list:
-            conn = models.server.Connect(i[2], i[3], i[4])
-            if conn.status_code:
-                msg.append(
-                    f"๑{i[0]}๑{MessageSegment.face(190)}{i[1]}\nIP：{conn.ip}\n端口：{conn.server_port}\n版本：{conn.serverversion}")
-            else:
-                msg.append(
-                    f"๑{i[0]}๑{MessageSegment.face(190)}{i[1]}\n{conn.error}")
-    else:
-        msg.append(
-            f"{server_info_list}")
+    if event.get_plaintext() == "服务器列表":
+        result, server_info_list = utils.server.GetInfo.all()
+        msg = []
+        if result:
+            if not server_info_list:
+                msg.append("群主很懒，没有添加任何服务器！")
+            for i in server_info_list:
+                conn = models.server.Connect(i[2], i[3], i[4])
+                if conn.status_code:
+                    msg.append(
+                        f"๑{i[0]}๑{MessageSegment.face(190)}{i[1]}\nIP：{conn.ip}\n端口：{conn.server_port}\n版本：{conn.serverversion}")
+                else:
+                    msg.append(
+                        f"๑{i[0]}๑{MessageSegment.face(190)}{i[1]}\n{conn.error}")
+        else:
+            msg.append(
+                f"{server_info_list}")
 
-    await server_list.finish(Message("\n".join(msg)))
+        await server_list.finish(Message("\n".join(msg)))
 
 
 # 该功能不适配TShock Terraria1.4.0.5版本 仅支持泰拉瑞亚TShock Terraria1.4.3.2及以上版本
@@ -69,15 +71,22 @@ world_progress = on_command("进度")
 
 
 @world_progress.handle()
-async def world_progress_handle(bot: Bot, event: Event):
+async def world_progress_handle(bot: Bot, event: GroupMessageEvent):
     text = event.get_plaintext().split(" ")
     if len(text) == 2:
         num = text[1]
-        result, server_info = utils.server.GetInfo.by_id(int(num))
+
+        if not num.isdigit():
+            await world_progress.finish(f"查询失败！\n无效的参数\n服务器序号必须为数字")
+        else:
+            num = int(num)
+
+        result, server_info = utils.server.GetInfo.by_id(num)
         if result:
             conn = models.server.Connect(server_info[2], server_info[3], server_info[4])
             result, progress = conn.progress()
             if result:
+                group_info = await bot.get_group_info(group_id=event.group_id)
                 progress = json.loads(progress["response"])
                 img = Image.open("img/progress_bg.png")
                 ft = ImageFont.truetype(font="font/Alibaba-PuHuiTi-Light.otf", size=100)
@@ -95,6 +104,9 @@ async def world_progress_handle(bot: Bot, event: Event):
                 draw = ImageDraw.Draw(img)
                 draw.text((10, 1040), "Developed by Qianyi", font=ft)
                 draw.text((310, 1040), time.strftime("%Y-%m-%d %H:%M:%S", time.localtime()), font=ft)
+                w, h = ft.getsize(f"QQ群：{group_info['group_name']}({group_info['group_id']})")
+                draw.text((img.width - w - 10, 10), f"QQ群：{group_info['group_name']}({group_info['group_id']})",
+                          font=ft)
 
                 row = 0
                 column = 0

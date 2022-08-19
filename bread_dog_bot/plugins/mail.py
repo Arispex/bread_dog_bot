@@ -18,6 +18,10 @@ async def mail_handle(bot: Bot, event: GroupMessageEvent):
     text = event.get_plaintext().split(" ")
     if len(text) == 2:
         qq = text[1]
+
+        if not qq.isdigit():
+            await mail.finish("获取失败！\n无效的参数\n请输入正确的QQ号码")
+
     elif len(text) == 1:
         qq = event.get_user_id()
     else:
@@ -37,13 +41,15 @@ async def mail_handle(bot: Bot, event: GroupMessageEvent):
 
         ft = ImageFont.truetype(font="font/Alibaba-PuHuiTi-Light.otf", size=60)
         draw = ImageDraw.Draw(img)
-        text_w, text_h = ft.getsize(f"{player.name}的邮箱({player.qq})")
-        draw.text(((w - text_w) / 2, 150), f"{player.name}的邮箱({player.qq})", font=ft)
+        text_w, text_h = ft.getsize(f"{player.name}({player.qq})的邮箱")
+        draw.text(((w - text_w) / 2, 150), f"{player.name}({player.qq})的邮箱", font=ft)
 
         ft = ImageFont.truetype(font="font/Alibaba-PuHuiTi-Light.otf", size=30)
         draw = ImageDraw.Draw(img)
         draw.text((10, 1040), "Developed by Qianyi", font=ft)
         draw.text((300, 1040), time.strftime("%Y-%m-%d %H:%M:%S", time.localtime()), font=ft)
+        w, h = ft.getsize(f"QQ群：{group_info['group_name']}({group_info['group_id']})")
+        draw.text((img.width - w - 10, 10), f"QQ群：{group_info['group_name']}({group_info['group_id']})", font=ft)
 
         row = 0
         column = 0
@@ -94,8 +100,18 @@ async def add_mail_handle(bot: Bot, event: GroupMessageEvent):
             item_id = text[2]
             item_num = text[3]
 
+            if not item_id.isdigit():
+                await add_mail.finish("添加失败！\n无效的参数\n物品ID必须为数字")
+            else:
+                item_id = int(item_id)
+
+            if not item_num.isdigit():
+                await add_mail.finish("添加失败！\n无效的参数\n物品数量必须为数字")
+            else:
+                item_num = int(item_num)
+
             player = models.player.Player(qq)
-            result, reason = player.add_mail(int(item_id), int(item_num))
+            result, reason = player.add_mail(item_id, item_num)
             if result:
                 await add_mail.finish(f"添加成功！")
             else:
@@ -118,8 +134,13 @@ async def sub_mail_handle(bot: Bot, event: GroupMessageEvent):
             qq = text[1]
             item_sn = text[2]
 
+            if not item_sn.isdigit():
+                await sub_mail.finish("删除失败！\n无效的参数\n物品序号必须为数字")
+            else:
+                item_sn = int(item_sn)
+
             player = models.player.Player(qq)
-            result, reason = player.empty_mail(int(item_sn))
+            result, reason = player.empty_mail(item_sn)
             if result:
                 await sub_mail.finish("删除成功！")
             else:
@@ -141,8 +162,13 @@ async def send_mail_handle(bot: Bot, event: GroupMessageEvent):
         qq = text[1]
         item_sn = text[2]
 
+        if not item_sn.isdigit():
+            await send_mail.finish("发送失败！\n无效的参数\n物品序号必须为数字")
+        else:
+            item_sn = int(item_sn)
+
         player = models.player.Player(event.get_user_id())
-        result, reason = player.send_mail(qq, int(item_sn))
+        result, reason = player.send_mail(qq, item_sn)
         if result:
             await send_mail.finish("发送成功！")
         else:
@@ -161,12 +187,20 @@ async def pick_up_mail_handle(bot: Bot, event: GroupMessageEvent):
         server_num = text[1]
         item_sn = text[2]
 
+        if not server_num.isdigit():
+            await pick_up_mail.finish("领取失败！\n无效的参数\n服务器序号必须为数字")
+        else:
+            server_num = int(server_num)
+
         if not item_sn.isdigit():
-            await pick_up_mail.finish("领取失败！\n物品编号错误！")
+            await pick_up_mail.finish("领取失败！\n无效的参数\n物品序号必须为数字")
+        else:
+            item_sn = int(item_sn)
+
         player = models.player.Player(event.get_user_id())
-        result, server_info = utils.server.GetInfo.by_id(int(server_num))
+        result, server_info = utils.server.GetInfo.by_id(server_num)
         if result:
-            result, reason = player.pick_up_mail(int(item_sn), *server_info[2:])
+            result, reason = player.pick_up_mail(item_sn, *server_info[2:])
             if result:
                 await pick_up_mail.finish("领取成功！")
             else:
@@ -187,7 +221,7 @@ async def recycle_mail_handle(bot: Bot, event: GroupMessageEvent):
         item_sn = text[1]
 
         if not item_sn.isdigit():
-            await pick_up_mail.finish("领取失败！\n物品编号错误！")
+            await recycle_mail.finish("回收失败！\n无效的参数\n物品序号必须为数字")
 
         player = models.player.Player(event.get_user_id())
         result, reason = player.recycle_mail(int(item_sn))

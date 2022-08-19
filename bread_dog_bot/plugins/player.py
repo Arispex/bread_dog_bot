@@ -16,30 +16,31 @@ sign_in = on_command("签到")
 
 @sign_in.handle()
 async def sign_in_handle(bot: Bot, event: Event):
-    player = models.player.Player(event.get_user_id())
-    if player.status_code:
-        result, get_money = player.sign_in()
-        if result:
-            result, player_sign_in_log = player.get_sign_in_log()
-            if get_money > config.SignIn.max_money / 2:
-                msg = "哇，今天你的运气看起来不错哦！"
+    if event.get_plaintext() == "签到":
+        player = models.player.Player(event.get_user_id())
+        if player.status_code:
+            result, get_money = player.sign_in()
+            if result:
+                result, player_sign_in_log = player.get_sign_in_log()
+                if get_money > config.SignIn.max_money / 2:
+                    msg = "哇，今天你的运气看起来不错哦！"
+                else:
+                    msg = "摸摸头，今天你的运气似乎不佳，没关系，明天再来！"
+                await sign_in.finish(Message(f"{MessageSegment.at(event.get_user_id())}\n签到成功！\n"
+                                             f"{msg}\n"
+                                             f"获得{config.Currency.name}：{get_money}\n"
+                                             f"当前{config.Currency.name}：{player.money}\n签到排名：{player_sign_in_log[0]}"))
             else:
-                msg = "摸摸头，今天你的运气似乎不佳，没关系，明天再来！"
-            await sign_in.finish(Message(f"{MessageSegment.at(event.get_user_id())}\n签到成功！\n"
-                                         f"{msg}\n"
-                                         f"获得{config.Currency.name}：{get_money}\n"
-                                         f"当前{config.Currency.name}：{player.money}\n签到排名：{player_sign_in_log[0]}"))
+                msg = "摸摸头，今天你已经签到过了哦！"
+                result, player_sign_in_log = player.get_sign_in_log()
+                await sign_in.finish(Message(f"{MessageSegment.at(event.get_user_id())}\n签到失败！\n"
+                                             f"{msg}\n"
+                                             f"获得{config.Currency.name}：{player_sign_in_log[2]}\n"
+                                             f"当前{config.Currency.name}：{player.money}\n签到排名：{player_sign_in_log[0]}"))
         else:
-            msg = "摸摸头，今天你已经签到过了哦！"
-            result, player_sign_in_log = player.get_sign_in_log()
-            await sign_in.finish(Message(f"{MessageSegment.at(event.get_user_id())}\n签到失败！\n"
-                                         f"{msg}\n"
-                                         f"获得{config.Currency.name}：{player_sign_in_log[2]}\n"
-                                         f"当前{config.Currency.name}：{player.money}\n签到排名：{player_sign_in_log[0]}"))
-    else:
-        if player.player_info == "不存在此玩家":
-            player.player_info = "您还没有添加白名单"
-        await sign_in.finish(Message(f"{MessageSegment.at(event.get_user_id())}\n签到失败！\n{player.player_info}"))
+            if player.player_info == "不存在此玩家":
+                player.player_info = "您还没有添加白名单"
+            await sign_in.finish(Message(f"{MessageSegment.at(event.get_user_id())}\n签到失败！\n{player.player_info}"))
 
 
 scheduler = require('nonebot_plugin_apscheduler').scheduler
@@ -65,8 +66,14 @@ async def add_money_handle(bot: Bot, event: Event):
         if len(text) == 3:
             qq = text[1]
             money = text[2]
+
+            if not money.isdigit():
+                await add_money.finish(f"添加失败！\n无效的参数\n{config.Currency.name}数量必须为数字")
+            else:
+                money = int(money)
+
             player = models.player.Player(qq)
-            result, player_money = player.add_money(int(money))
+            result, player_money = player.add_money(money)
             if result:
                 await add_money.finish(Message(f"添加成功！\n该玩家剩余{config.Currency.name}：{player_money}"))
             else:
@@ -88,8 +95,14 @@ async def sub_money_handle(bot: Bot, event: Event):
         if len(text) == 3:
             qq = text[1]
             money = text[2]
+
+            if not money.isdigit():
+                await add_money.finish(f"添加失败！\n无效的参数\n{config.Currency.name}数量必须为数字")
+            else:
+                money = int(money)
+
             player = models.player.Player(qq)
-            result, player_money = player.sub_money(int(money))
+            result, player_money = player.sub_money(money)
             if result:
                 await sub_money.finish(Message(f"扣除成功！\n该玩家剩余{config.Currency.name}：{player_money}"))
             else:
@@ -111,8 +124,14 @@ async def set_money_handle(bot: Bot, event: Event):
         if len(text) == 3:
             qq = text[1]
             money = text[2]
+
+            if not money.isdigit():
+                await add_money.finish(f"添加失败！\n无效的参数\n{config.Currency.name}数量必须为数字")
+            else:
+                money = int(money)
+
             player = models.player.Player(qq)
-            result, player_money = player.set_money(int(money))
+            result, player_money = player.set_money(money)
             if result:
                 await set_money.finish(Message(f"设置成功！\n该玩家剩余{config.Currency.name}：{player_money}"))
             else:

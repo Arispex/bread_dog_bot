@@ -1,7 +1,9 @@
 import utils.server
 
-version = 1.6
-sql = 'alter table whitelist add mail text;'
+version = 1.7
+
+sql = 'create table prize_pool(ID integer primary key autoincrement, Name text not null,Price int not null, Progress text not null, ProgressServer integer default 1 not null, Content text);'
+
 result, reason = utils.server.execute_sql(sql)
 
 if result:

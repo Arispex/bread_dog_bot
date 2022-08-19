@@ -1,11 +1,13 @@
 import time
 
 import config
+import models.prize_pool
 import utils.server
 import utils.player
 import utils.whitelist
 import utils.mail
 import utils.lottery
+import utils.prize_pool
 
 
 class Player:
@@ -258,12 +260,38 @@ class Player:
                     if 36 - len(player_mail) >= count:
                         for i in lottery_result:
                             self.add_mail(i[0], i[1])
+                        self.sub_money(count * config.Lottery.RandomLottery.cost_money)
                         return True, lottery_result
                     else:
-                        self.add_money(count * config.Lottery.RandomLottery.cost_money)
                         return False, "邮箱空间不足\n请先清理邮箱"
                 else:
-                    self.add_money(count * config.Lottery.RandomLottery.cost_money)
+                    return False, player_mail
+            else:
+                return False, lottery_result
+        else:
+            return False, self.player_info
+
+    def prize_pool_lottery(self, prize_pool_id: int, count: int = 1):
+        """
+        奖池抽奖
+        :param prize_pool_id: 奖池ID
+        :param count: 抽奖次数
+        :return: 抽奖结果 成功返回[True, 抽奖结果] 失败返回[False, 错误信息]
+        """
+        if self.status_code:
+            result, lottery_result = utils.prize_pool.lottery(self.qq, prize_pool_id, count)
+            prize_pool = models.prize_pool.PrizePool(prize_pool_id)
+            if result:
+                result, player_mail = self.get_mail()
+                if result:
+                    if 36 - len(player_mail) >= count:
+                        for i in lottery_result:
+                            self.add_mail(i[0], i[1])
+                        self.sub_money(count * prize_pool.price)
+                        return True, lottery_result
+                    else:
+                        return False, "邮箱空间不足\n请先清理邮箱"
+                else:
                     return False, player_mail
             else:
                 return False, lottery_result

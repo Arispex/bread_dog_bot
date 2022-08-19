@@ -152,12 +152,14 @@ def recycle(qq: str, item_sn: int):
         if item_sn > 36 or item_sn < 1:  # 判断序号是否合法
             return False, "序号超出范围(1-36)"
         if len(player_mail) >= item_sn:  # 判断序号是否拥有该序号的物品
-            item_id = player_mail[item_sn - 1][0]
-            item_num = player_mail[item_sn - 1][1]
+            item_id = int(player_mail[item_sn - 1][0])
+            item_num = int(player_mail[item_sn - 1][1])
             result, reason = empty(qq, item_sn)
             if result:
                 player = models.player.Player(qq)
-                money = random.randint(1, int(item_num) // 5)
+                if item_num < 5:
+                    item_num = 5
+                money = random.randint(1, item_num // 5)
                 player.add_money(money)
                 return True, money
             else:
