@@ -117,7 +117,9 @@ _✨基于 [Nonebot2](https://github.com/nonebot/nonebot2) 和 [go-cqhttp](https
 ## 支持
 支持 Terraria v1.4.0.5 +
 
-强烈推荐使用 Terraria v1.4.3.6
+~~你从哪下的旧版本~~
+
+强烈推荐使用 Terraria v1.4.4.2（最新版）
 
 <details>
 <summary>v1.4.3.2以下版本无法使用以下功能</summary>
@@ -159,8 +161,6 @@ _✨基于 [Nonebot2](https://github.com/nonebot/nonebot2) 和 [go-cqhttp](https
 
 ### Windows
 [视频教程](https://breaddogbot-1302721716.cos.ap-shanghai.myqcloud.com/tutorial.mp4)
-
-[依赖点我下载](https://www.miaovps.com/solved_packageMissInInstalling_mu_visual_cpp_build_tools_2015_update_3_x64_dvd_dfd9a39c.iso)
 
 
 ## 更新日志
