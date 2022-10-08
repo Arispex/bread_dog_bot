@@ -8,7 +8,7 @@
 
 _✨基于 [Nonebot2](https://github.com/nonebot/nonebot2) 和 [go-cqhttp](https://github.com/Mrs4s/go-cqhttp) 的 Terraria TShock QQ 机器人✨_
 
-![Python](https://img.shields.io/badge/python-3.10%2B-blue)
+![Python](https://img.shields.io/badge/python-3.8.6%2B-blue)
 ![Nonebot2](https://img.shields.io/badge/nonebot-2.0.0-yellow)
 ![Go-cqhttp](https://img.shields.io/badge/go--cqhttp-1.0.0-red)
 <br/>    
