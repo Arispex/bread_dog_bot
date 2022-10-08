@@ -1,7 +1,8 @@
 from nonebot import on_command
-from nonebot.adapters.onebot.v11 import Bot, Event, MessageSegment, Message, GroupMessageEvent
-import utils.cloud_blacklist
+from nonebot.adapters.onebot.v11 import Bot, GroupMessageEvent
+
 import utils.admin
+import utils.cloud_blacklist
 
 cloud_blacklist_detection = on_command("云黑检测")
 

@@ -1,17 +1,13 @@
-from nonebot import on_command, export
-from nonebot.typing import T_State
 from nonebot import on_notice
-from nonebot.adapters.onebot.v11 import Bot, Event, MessageSegment, GroupIncreaseNoticeEvent, Message, \
+from nonebot.adapters.onebot.v11 import Bot, MessageSegment, GroupIncreaseNoticeEvent, Message, \
     GroupDecreaseNoticeEvent
+from nonebot.typing import T_State
+
 import config
-import utils.server
-import utils.whitelist
 import models.server
 import utils.cloud_blacklist
-
-export = export()
-export.name = '进群欢迎'
-export.usage = '欢迎新人'
+import utils.server
+import utils.whitelist
 
 welcom = on_notice()
 

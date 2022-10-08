@@ -3,7 +3,7 @@ from nonebot import on_startswith
 from nonebot.adapters.onebot.v11 import Bot, GroupMessageEvent
 
 # 感谢@ACaiCat的提供的wiki代码
-wiki = on_startswith(["搜索", "wiki", "Wiki", "WIKI"])
+wiki = on_startswith(("搜索", "wiki", "Wiki", "WIKI"))
 
 
 @wiki.handle()

@@ -20,12 +20,13 @@ class Translator:
         @staticmethod
         def en_to_zh(text: str):
             progress_dict = {"King Slime": "史莱姆王", "Eye of Cthulhu": "克苏鲁之眼",
-                                "Eater of Worlds / Brain of Cthulhu": "世界吞噬者/克苏鲁之脑", "Queen Bee": "蜂后",
-                                "Skeletron": "骷髅王", "Deerclops": "巨鹿", "Wall of Flesh": "血肉之墙",
-                                "Queen Slime": "史莱姆女王", "The Twins": "双子魔眼", "The Destroyer": "毁灭者",
-                                "Skeletron Prime": "机械骷髅王", "Plantera": "世纪之花", "Golem": "石巨人",
-                                "Duke Fishron": "猪龙鱼公爵", "Empress of Light": "光之女皇", "Lunatic Cultist": "拜月教邪教徒",
-                                "Moon Lord": "月亮领主", "None": "无"}
+                             "Eater of Worlds / Brain of Cthulhu": "世界吞噬者/克苏鲁之脑", "Queen Bee": "蜂后",
+                             "Skeletron": "骷髅王", "Deerclops": "巨鹿", "Wall of Flesh": "血肉之墙",
+                             "Queen Slime": "史莱姆女王", "The Twins": "双子魔眼", "The Destroyer": "毁灭者",
+                             "Skeletron Prime": "机械骷髅王", "Plantera": "世纪之花", "Golem": "石巨人",
+                             "Duke Fishron": "猪龙鱼公爵", "Empress of Light": "光之女皇",
+                             "Lunatic Cultist": "拜月教邪教徒",
+                             "Moon Lord": "月亮领主", "None": "无"}
             try:
                 return progress_dict[text]
             except KeyError:

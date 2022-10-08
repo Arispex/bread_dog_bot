@@ -1,6 +1,6 @@
 from nonebot import on_command
-from nonebot.adapters.onebot.v11 import Bot, Event, MessageSegment, Message, GroupMessageEvent
-from nonebot.permission import SUPERUSER
+from nonebot.adapters.onebot.v11 import Bot, Event, GroupMessageEvent
+
 import models.server
 import models.server
 import utils.admin

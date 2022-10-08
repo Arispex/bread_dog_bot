@@ -1,20 +1,20 @@
 import math
-
-from nonebot import on_command, get_driver
-from nonebot.adapters.onebot.v11 import Bot, Event, MessageSegment, Message, GroupMessageEvent
-import models.player
-import config
-from nonebot import require
-import utils.server
-import utils.admin
-import utils.whitelist
-import models.server
-from PIL import Image, ImageChops, ImageDraw, ImageFont
-import time
 import os
-import utils.prize_pool
+import time
+
+from PIL import Image, ImageDraw, ImageFont
+from nonebot import on_command
+from nonebot.adapters.onebot.v11 import Bot, MessageSegment, Message, GroupMessageEvent
+
+import config
+import models.player
 import models.prize_pool
+import models.server
 import utils.admin
+import utils.admin
+import utils.prize_pool
+import utils.server
+import utils.whitelist
 
 random_lottery = on_command("随机抽奖")
 

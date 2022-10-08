@@ -1,3 +1,7 @@
+## 2022/10/08(v1.7.2)
++ 优化部分代码，向下兼容至 Python 3.8.6 ~~懒得在Linux上再装个Python~~
++ 新增插件[nonebot-plugin-gocqhttp](https://github.com/mnixry/nonebot-plugin-gocqhttp)
+
 ## 2022/08/19(v1.7)
 + 修复了添加白名单可使用特殊符号
 + 优化了发送，现在发送的内容会显示昵称和QQ号(内容 -> QQ昵称(QQ号)：内容)

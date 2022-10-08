@@ -1,8 +1,10 @@
+from typing import Union
+
 import config
 import requests
 
 
-def detect(qq: str | int | list):
+def detect(qq: Union[str, int, list]):
     """
     检测QQ是否在云黑名单中
     :param qq: QQ number.

@@ -1,12 +1,14 @@
 import math
 import os
-import utils.admin
-from nonebot.permission import SUPERUSER
+import time
+
+import requests
+from PIL import Image, ImageDraw, ImageFont
 from nonebot import on_command
 from nonebot.adapters.onebot.v11 import Bot, Event, MessageSegment, GroupMessageEvent, Message
-from PIL import Image, ImageChops, ImageDraw, ImageFont
-import time
-import requests
+from nonebot.permission import SUPERUSER
+
+import utils.admin
 
 add_admin = on_command("添加管理员", permission=SUPERUSER)
 

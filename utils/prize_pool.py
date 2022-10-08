@@ -83,7 +83,7 @@ def add(name: str, price: int, progress: str, progress_server: int):
             if result:
                 result, sql_return_result = utils.server.execute_sql(
                     "insert into prize_pool (Name, Price, Progress, ProgressServer) values ('%s', '%s', '%s', '%s')" % (
-                    name, price, progress_dict[progress], progress_server))
+                        name, price, progress_dict[progress], progress_server))
                 if result:
                     result, prize_pool_info_list = GetInfo.all()
                     num = 1
@@ -92,7 +92,7 @@ def add(name: str, price: int, progress: str, progress_server: int):
                         num += 1
                     utils.server.execute_sql(
                         "update sqlite_sequence set seq = '%s' where name = '%s'" % (
-                        len(prize_pool_info_list), "prize_pool"))
+                            len(prize_pool_info_list), "prize_pool"))
                     return True, None
                 else:
                     return False, sql_return_result
@@ -235,7 +235,7 @@ def lottery(qq: str, prize_pool_id: int, count: int = 1):
                 for x in range(int(round(i["item_probability"] / prize_pool.total_probability, 2) * 100)):
                     l.append(i["item_id"])
 
-            with open("item.json", "r", encoding="utf-8") as f:
+            with open("items.json", "r", encoding="utf-8") as f:
                 items = json.load(f)
 
             result = []

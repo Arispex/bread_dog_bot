@@ -1,12 +1,12 @@
-import json
+import os
 import time
-from nonebot import on_command, get_driver
-from nonebot.adapters.onebot.v11 import Bot, Event, MessageSegment, Message, GroupMessageEvent
+
+from PIL import Image, ImageDraw, ImageFont
+from nonebot import on_command
+from nonebot.adapters.onebot.v11 import Bot, MessageSegment, Message, GroupMessageEvent
 
 import config
 import models.player
-from PIL import Image, ImageChops, ImageDraw, ImageFont
-import os
 import utils.admin
 import utils.server
 
