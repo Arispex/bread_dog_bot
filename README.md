@@ -157,12 +157,6 @@ _✨基于 [Nonebot2](https://github.com/nonebot/nonebot2) 和 [go-cqhttp](https
 </details>
 
 
-## 开始部署
-
-### Windows
-[视频教程](https://breaddogbot-1302721716.cos.ap-shanghai.myqcloud.com/tutorial.mp4)
-
-
 ## 更新日志
 版本更新请参考[此处](change_log.md)
 
