@@ -46,8 +46,8 @@ class Lottery:
         # 随机抽奖物品id范围
         # 最小id 不能小于1
         min_item_id = 1
-        # 最大id 不能大于5124(v1.4.3.6)
-        max_item_id = 5124
+        # 最大id 不能大于5455(v1.4.4.5)
+        max_item_id = 5455
         # 随机抽奖物品数量范围
         # 最小数量 不能小于1
         min_item_count = 1

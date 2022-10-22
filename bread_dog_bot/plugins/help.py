@@ -1,4 +1,4 @@
-from nonebot import on_command
+from nonebot import on_command, logger
 from nonebot.adapters.onebot.v11 import Bot, Event
 
 import config
@@ -8,6 +8,7 @@ help = on_command("帮助")
 
 @help.handle()
 async def help_handle(bot: Bot, event: Event):
+    logger.info(f"「{event.get_user_id()}」执行了 「帮助」")
     text = event.get_plaintext().split(" ")
     if len(text) == 2:
         command = text[1]

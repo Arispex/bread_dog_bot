@@ -2,7 +2,7 @@ import os
 import time
 
 from PIL import Image, ImageDraw, ImageFont
-from nonebot import on_command
+from nonebot import on_command, logger
 from nonebot.adapters.onebot.v11 import Bot, MessageSegment, Message, GroupMessageEvent
 
 import config
@@ -15,6 +15,7 @@ mail = on_command("玩家邮箱")
 
 @mail.handle()
 async def mail_handle(bot: Bot, event: GroupMessageEvent):
+    logger.info(f"「{event.get_user_id()}」执行了 「玩家邮箱」")
     text = event.get_plaintext().split(" ")
     if len(text) == 2:
         qq = text[1]
@@ -56,7 +57,11 @@ async def mail_handle(bot: Bot, event: GroupMessageEvent):
         num = 1
         for i in player_mail:
             item_bg = Image.new("RGBA", (150, 150), (0, 0, 0, 0))
-            item_img = Image.open(f"img/item/item_{i[0]}.png")
+            try:
+                item_img = Image.open(f"img/item/item_{i[0]}.png")
+            except FileNotFoundError:
+                item_img = Image.open(f"img/item/item_0.png")
+
             item_img = item_img.resize((item_img.width * 2, item_img.height * 2))
             r, g, b, a = item_img.split()
             item_bg.paste(item_img, (round((150 - item_img.width) / 2), round((150 - item_img.height) / 2)), mask=a)
@@ -92,6 +97,7 @@ add_mail = on_command("添加邮件")
 
 @add_mail.handle()
 async def add_mail_handle(bot: Bot, event: GroupMessageEvent):
+    logger.info(f"「{event.get_user_id()}」执行了 「添加邮件」")
     admins = utils.admin.get()
     if event.get_user_id() in admins:
         text = event.get_plaintext().split(" ")
@@ -114,6 +120,7 @@ async def add_mail_handle(bot: Bot, event: GroupMessageEvent):
             result, reason = player.add_mail(item_id, item_num)
             if result:
                 await add_mail.finish(f"添加成功！")
+                logger.info(f"「{event.get_user_id()}」给 {qq} 添加了一个邮件")
             else:
                 await add_mail.finish(f"添加失败！\n{reason}")
         else:
@@ -127,6 +134,7 @@ sub_mail = on_command("删除邮件")
 
 @sub_mail.handle()
 async def sub_mail_handle(bot: Bot, event: GroupMessageEvent):
+    logger.info(f"「{event.get_user_id()}」执行了 「删除邮件」")
     admins = utils.admin.get()
     if event.get_user_id() in admins:
         text = event.get_plaintext().split(" ")
@@ -143,6 +151,7 @@ async def sub_mail_handle(bot: Bot, event: GroupMessageEvent):
             result, reason = player.empty_mail(item_sn)
             if result:
                 await sub_mail.finish("删除成功！")
+                logger.info(f"「{event.get_user_id()}」删除了「{qq}」一个邮件")
             else:
                 await sub_mail.finish(f"删除失败！\n{reason}")
 
@@ -157,6 +166,7 @@ send_mail = on_command("发送邮件")
 
 @send_mail.handle()
 async def send_mail_handle(bot: Bot, event: GroupMessageEvent):
+    logger.info(f"「{event.get_user_id()}」执行了 「发送邮件」")
     text = event.get_plaintext().split(" ")
     if len(text) == 3:
         qq = text[1]
@@ -171,6 +181,7 @@ async def send_mail_handle(bot: Bot, event: GroupMessageEvent):
         result, reason = player.send_mail(qq, item_sn)
         if result:
             await send_mail.finish("发送成功！")
+            logger.info(f"「{event.get_user_id()}」向「{qq}」发送了一个邮件")
         else:
             await send_mail.finish(f"发送失败！\n{reason}")
     else:
@@ -182,6 +193,7 @@ pick_up_mail = on_command("领取邮件")
 
 @pick_up_mail.handle()
 async def pick_up_mail_handle(bot: Bot, event: GroupMessageEvent):
+    logger.info(f"「{event.get_user_id()}」执行了 「领取邮件」")
     text = event.get_plaintext().split(" ")
     if len(text) == 3:
         server_num = text[1]
@@ -203,6 +215,7 @@ async def pick_up_mail_handle(bot: Bot, event: GroupMessageEvent):
             result, reason = player.pick_up_mail(item_sn, *server_info[2:])
             if result:
                 await pick_up_mail.finish("领取成功！")
+                logger.info(f"「{event.get_user_id()}」在 {server_num} 号服务器 领取了一个邮件")
             else:
                 await pick_up_mail.finish(f"领取失败！\n{reason}")
         else:
@@ -216,6 +229,7 @@ recycle_mail = on_command("回收邮件")
 
 @recycle_mail.handle()
 async def recycle_mail_handle(bot: Bot, event: GroupMessageEvent):
+    logger.info(f"「{event.get_user_id()}」执行了 「回收邮件」")
     text = event.get_plaintext().split(" ")
     if len(text) == 2:
         item_sn = text[1]
@@ -227,6 +241,7 @@ async def recycle_mail_handle(bot: Bot, event: GroupMessageEvent):
         result, reason = player.recycle_mail(int(item_sn))
         if result:
             await recycle_mail.finish(f"回收成功！\n获得{config.Currency.name}：{reason}")
+            logger.info(f"「{event.get_user_id()}」回收了第 {item_sn} 个邮件")
         else:
             await recycle_mail.finish(f"回收失败！\n{reason}")
     else:

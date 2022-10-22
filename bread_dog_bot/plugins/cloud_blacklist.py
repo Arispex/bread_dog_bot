@@ -1,4 +1,4 @@
-from nonebot import on_command
+from nonebot import on_command, logger
 from nonebot.adapters.onebot.v11 import Bot, GroupMessageEvent
 
 import utils.admin
@@ -10,6 +10,7 @@ cloud_blacklist_detection = on_command("云黑检测")
 @cloud_blacklist_detection.handle()
 async def cloud_blacklist_detection_handle(bot: Bot, event: GroupMessageEvent):
     if event.get_plaintext() == "云黑检测":
+        logger.info(f"「{event.get_user_id()}」执行了 「云黑检测」")
         admins = utils.admin.get()
         if event.get_user_id() in admins:
             member_list = await bot.get_group_member_list(group_id=event.group_id)
@@ -35,6 +36,7 @@ add_cloud_blacklist = on_command("添加云黑")
 
 @add_cloud_blacklist.handle()
 async def add_blacklist_handle(bot: Bot, event: GroupMessageEvent):
+    logger.info(f"「{event.get_user_id()}」执行了 「添加云黑」")
     admins = utils.admin.get()
     if event.get_user_id() in admins:
         text = event.get_plaintext().split(" ")
@@ -48,6 +50,7 @@ async def add_blacklist_handle(bot: Bot, event: GroupMessageEvent):
 
             result, reason = utils.cloud_blacklist.add(qq=qq, reason=reason, group_id=str(group_id))
             if result:
+                logger.info(f"「{event.get_user_id()}」添加了云黑 QQ={qq} group_id={str(group_id)} reason={result}")
                 await add_cloud_blacklist.finish(f"添加成功！")
             else:
                 if reason == "权限验证失败":
@@ -64,6 +67,7 @@ del_cloud_blacklist = on_command("删除云黑")
 
 @del_cloud_blacklist.handle()
 async def del_cloud_blacklist_handle(bot: Bot, event: GroupMessageEvent):
+    logger.info(f"「{event.get_user_id()}」执行了 「删除云黑」")
     admins = utils.admin.get()
     if event.get_user_id() in admins:
         text = event.get_plaintext().split(" ")
@@ -76,6 +80,7 @@ async def del_cloud_blacklist_handle(bot: Bot, event: GroupMessageEvent):
             result, reason = utils.cloud_blacklist.delete(qq=qq)
             if result:
                 await del_cloud_blacklist.finish(f"删除成功！")
+                logger.info(f"「{event.get_user_id()}」删除了QQ为「{qq}」的云黑")
             else:
                 if reason == "权限验证失败":
                     reason = "Token错误，请检查config.py文件中的token是否正确"
@@ -91,6 +96,7 @@ query_cloud_blacklist = on_command("云黑信息")
 
 @query_cloud_blacklist.handle()
 async def query_cloud_blacklist_handle(bot: Bot, event: GroupMessageEvent):
+    logger.info(f"「{event.get_user_id()}」执行了 「云黑信息」")
     admins = utils.admin.get()
     if event.get_user_id() in admins:
         text = event.get_plaintext().split(" ")

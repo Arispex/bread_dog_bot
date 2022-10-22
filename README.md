@@ -115,19 +115,7 @@ _✨基于 [Nonebot2](https://github.com/nonebot/nonebot2) 和 [go-cqhttp](https
 
 
 ## 支持
-支持 Terraria v1.4.0.5 +
-
-~~你从哪下的旧版本~~
-
-强烈推荐使用 Terraria v1.4.4.2（最新版）
-
-<details>
-<summary>v1.4.3.2以下版本无法使用以下功能</summary>
-
-
-+ 进度
-+ 玩家背包
-</details>
+强烈推荐使用 Terraria v1.4.4.5（最新版）
 
 
 ## 前置插件

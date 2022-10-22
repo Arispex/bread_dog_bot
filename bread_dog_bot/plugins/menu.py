@@ -1,4 +1,4 @@
-from nonebot import on_command
+from nonebot import on_command, logger
 from nonebot.adapters.onebot.v11 import Bot, Event, MessageSegment, Message
 import config
 
@@ -7,6 +7,8 @@ menu = on_command("菜单")
 
 @menu.handle()
 async def menu_handle(bot: Bot, event: Event):
+    logger.info(f"「{event.get_user_id()}」执行了 「菜单」")
+
     await menu.finish(Message(
         "———菜单———\n"
         f"{MessageSegment.face(147)}基础功能\n"
@@ -29,6 +31,7 @@ basic = on_command("基础功能")
 
 @basic.handle()
 async def basic_handle(bot: Bot, event: Event):
+    logger.info(f"「{event.get_user_id()}」执行了 「基础功能」")
     text = event.get_plaintext().split(" ")
     try:
         num = int(text[1])
@@ -59,6 +62,7 @@ bind = on_command("绑定功能")
 
 @bind.handle()
 async def bind_handle(bot: Bot, event: Event):
+    logger.info(f"「{event.get_user_id()}」执行了 「绑定功能」")
     text = event.get_plaintext().split(" ")
     try:
         num = int(text[1])
@@ -79,6 +83,7 @@ player = on_command("玩家功能")
 
 @player.handle()
 async def player_handle(bot: Bot, event: Event):
+    logger.info(f"「{event.get_user_id()}」执行了 「玩家功能」")
     text = event.get_plaintext().split(" ")
     try:
         num = int(text[1])
@@ -109,6 +114,7 @@ admin = on_command("管理功能")
 
 @admin.handle()
 async def admin_handle(bot: Bot, event: Event):
+    logger.info(f"「{event.get_user_id()}」执行了 「管理功能」")
     text = event.get_plaintext().split(" ")
     try:
         num = int(text[1])
@@ -130,6 +136,7 @@ cloud = on_command("云黑功能")
 
 @cloud.handle()
 async def cloud_handle(bot: Bot, event: Event):
+    logger.info(f"「{event.get_user_id()}」执行了 「云黑功能」")
     text = event.get_plaintext().split(" ")
     try:
         num = int(text[1])
@@ -151,6 +158,7 @@ lottery = on_command("抽奖功能")
 
 @lottery.handle()
 async def lottery_handle(bot: Bot, event: Event):
+    logger.info(f"「{event.get_user_id()}」执行了 「抽奖功能」")
     text = event.get_plaintext().split(" ")
     try:
         num = int(text[1])
@@ -182,6 +190,7 @@ shop = on_command("邮箱功能")
 
 @shop.handle()
 async def shop_handle(bot: Bot, event: Event):
+    logger.info(f"「{event.get_user_id()}」执行了 「邮箱功能」")
     text = event.get_plaintext().split(" ")
     try:
         num = int(text[1])
@@ -211,6 +220,7 @@ rank = on_command("排行榜功能")
 
 @rank.handle()
 async def rank_handle(bot: Bot, event: Event):
+    logger.info(f"「{event.get_user_id()}」执行了 「排行榜功能」")
     text = event.get_plaintext().split(" ")
     try:
         num = int(text[1])
@@ -229,12 +239,13 @@ about = on_command("关于")
 
 @about.handle()
 async def about_handle(bot: Bot, event: Event):
+    logger.info(f"「{event.get_user_id()}」执行了 「关于」")
     await about.finish(Message(
         "———关于———\n"
         "bread dog bot\n"
         "一个高度可自定义化的 Terraria TShock Bot\n"
-        "版本: 1.7\n"
-        "更新时间: 2022/08/19\n"
+        "版本: 2.0 alpha 2\n"
+        "更新时间: 2022/10/9\n"
         "作者: 千亦\n"
         "Github: https://github.com/Qianyiovo/breadDogBot\n"
         "License: GPLv3\n"

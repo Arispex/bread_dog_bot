@@ -1,7 +1,7 @@
 import math
 import os
 import time
-
+from nonebot import logger
 import requests
 from PIL import Image, ImageDraw, ImageFont
 from nonebot import on_command
@@ -15,6 +15,7 @@ add_admin = on_command("添加管理员", permission=SUPERUSER)
 
 @add_admin.handle()
 async def add_admin_handle(bot: Bot, event: Event):
+    logger.info(f"「{event.get_user_id()}」执行了 「添加管理员」")
     text = event.get_plaintext().split(" ")
     if len(text) == 2:
         qq = text[1]
@@ -22,6 +23,7 @@ async def add_admin_handle(bot: Bot, event: Event):
             result, reason = utils.admin.add(qq)
             if result:
                 await add_admin.finish(f"添加成功！")
+                logger.info(f"「{event.get_user_id()}」成功添加QQ「{qq}」为管理员")
             else:
                 await add_admin.finish("添加失败！\n他已经是管理员了")
         await add_admin.finish("添加失败！\n无效的参数\n请输入正确的QQ号")
@@ -34,6 +36,7 @@ delete_admin = on_command("删除管理员", permission=SUPERUSER)
 
 @delete_admin.handle()
 async def delete_admin_handle(bot: Bot, event: Event):
+    logger.info(f"「{event.get_user_id()}」执行了 「删除管理员」")
     text = event.get_plaintext().split(" ")
     if len(text) == 2:
         qq = text[1]
@@ -41,6 +44,7 @@ async def delete_admin_handle(bot: Bot, event: Event):
             result, reason = utils.admin.delete(qq)
             if result:
                 await delete_admin.finish(f"删除成功！")
+                logger.info(f"「{event.get_user_id()}」成功删除QQ「{qq}」为的管理员")
             else:
                 await delete_admin.finish("删除失败！\n他不是管理员")
         await delete_admin.finish("删除失败！\n无效的参数\n请输入正确的QQ号")
@@ -53,6 +57,7 @@ admin_list = on_command("管理员列表")
 
 @admin_list.handle()
 async def admin_list_handle(bot: Bot, event: GroupMessageEvent):
+    logger.info(f"「{event.get_user_id()}」执行了 「管理员列表」")
     text = event.get_plaintext().split(" ")
     if len(text) == 1:
         page = 1

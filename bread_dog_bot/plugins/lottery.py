@@ -3,7 +3,7 @@ import os
 import time
 
 from PIL import Image, ImageDraw, ImageFont
-from nonebot import on_command
+from nonebot import on_command, logger
 from nonebot.adapters.onebot.v11 import Bot, MessageSegment, Message, GroupMessageEvent
 
 import config
@@ -21,6 +21,7 @@ random_lottery = on_command("随机抽奖")
 
 @random_lottery.handle()
 async def random_lottery_handle(bot: Bot, event: GroupMessageEvent):
+    logger.info(f"「{event.get_user_id()}」执行了 「随机抽奖」")
     text = event.get_plaintext().split(" ")
     if len(text) == 2:
         count = text[1]
@@ -61,7 +62,11 @@ async def random_lottery_handle(bot: Bot, event: GroupMessageEvent):
             column = 0
             for i in lottery_result:
                 item_bg = Image.new("RGBA", (200, 200))
-                item_img = Image.open(f"img/item/item_{i[0]}.png")
+                try:
+                    item_img = Image.open(f"img/item/item_{i[0]}.png")
+                except FileNotFoundError:
+                    item_img = Image.open(f"img/item/item_0.png")
+
                 item_img = item_img.resize((item_img.width * 2, item_img.height * 2))
                 r, g, b, a = item_img.split()
                 item_bg.paste(item_img, (round((200 - item_img.width) / 2), round((150 - item_img.height) / 2)), mask=a)
@@ -100,6 +105,7 @@ prize_pool_list = on_command("奖池列表")
 @prize_pool_list.handle()
 async def prize_pool_list_handle(bot: Bot, event: GroupMessageEvent):
     if event.get_plaintext() == "奖池列表":
+        logger.info(f"「{event.get_user_id()}」执行了 「奖池列表」")
         result, prize_pools = utils.prize_pool.GetInfo.all()
         if result:
             if len(prize_pools) == 0:
@@ -115,6 +121,7 @@ add_prize_pool = on_command("添加奖池")
 
 @add_prize_pool.handle()
 async def add_prize_pool_handle(bot: Bot, event: GroupMessageEvent):
+    logger.info(f"「{event.get_user_id()}」执行了 「添加奖池」")
     admins = utils.admin.get()
     if event.get_user_id() in admins:
         text = event.get_plaintext().split(" ")
@@ -125,24 +132,25 @@ async def add_prize_pool_handle(bot: Bot, event: GroupMessageEvent):
             progress_server = text[4]
 
             if not name.isalnum():
-                await add_prize_pool.finish("抽奖失败！\n无效的参数\n奖池名称不能包含特殊字符")
+                await add_prize_pool.finish("添加失败！\n无效的参数\n奖池名称不能包含特殊字符")
 
             if not price.isdigit():
-                await add_prize_pool.finish("抽奖失败！\n无效的参数\n价格必须为数字")
+                await add_prize_pool.finish("添加失败！\n无效的参数\n价格必须为数字")
             else:
                 price = int(price)
 
             if not progress.isalpha():
-                await add_prize_pool.finish("抽奖失败！\n无效的参数\n进度限制必须为中文")
+                await add_prize_pool.finish("添加失败！\n无效的参数\n进度限制必须为中文")
 
             if not progress_server.isdigit():
-                await add_prize_pool.finish("抽奖失败！\n无效的参数\n进度参照服务器ID必须为数字")
+                await add_prize_pool.finish("添加失败！\n无效的参数\n进度参照服务器ID必须为数字")
             else:
                 progress_server = int(progress_server)
 
             result, reason = utils.prize_pool.add(name, price, progress, progress_server)
             if result:
                 await add_prize_pool.finish("添加成功！")
+                logger.info(f"「{event.get_user_id()}」添加了一个名为「{name}」的奖池")
             else:
                 await add_prize_pool.finish(f"添加失败！\n{reason}")
         else:
@@ -156,6 +164,7 @@ sub_prize_pool = on_command("删除奖池")
 
 @sub_prize_pool.handle()
 async def sub_prize_pool_handle(bot: Bot, event: GroupMessageEvent):
+    logger.info(f"「{event.get_user_id()}」执行了 「删除奖池」")
     admins = utils.admin.get()
     if event.get_user_id() in admins:
         text = event.get_plaintext().split(" ")
@@ -168,6 +177,7 @@ async def sub_prize_pool_handle(bot: Bot, event: GroupMessageEvent):
             result, reason = utils.prize_pool.delete(prize_pool_name)
             if result:
                 await sub_prize_pool.finish("删除成功！")
+                logger.info(f"「{event.get_user_id()}」删除了名为「{prize_pool_name}」的奖池")
             else:
                 await sub_prize_pool.finish(f"删除失败！\n{reason}")
         else:
@@ -181,6 +191,7 @@ add_prize_pool_item = on_command("添加奖池物品")
 
 @add_prize_pool_item.handle()
 async def add_prize_pool_item_handle(bot: Bot, event: GroupMessageEvent):
+    logger.info(f"「{event.get_user_id()}」执行了 「添加奖池物品」")
     admins = utils.admin.get()
     if event.get_user_id() in admins:
         text = event.get_plaintext().split(" ")
@@ -192,27 +203,27 @@ async def add_prize_pool_item_handle(bot: Bot, event: GroupMessageEvent):
             probability = text[5]
 
             if not prize_pool_id.isdigit():
-                await add_prize_pool_item.finish("抽奖失败！\n无效的参数\n奖池ID必须为数字")
+                await add_prize_pool_item.finish("添加失败！\n无效的参数\n奖池ID必须为数字")
             else:
                 prize_pool_id = int(prize_pool_id)
 
             if not item_id.isdigit():
-                await add_prize_pool_item.finish("抽奖失败！\n无效的参数\n物品ID必须为数字")
+                await add_prize_pool_item.finish("添加失败！\n无效的参数\n物品ID必须为数字")
             else:
                 item_id = int(item_id)
 
             if not item_max_amount.isdigit():
-                await add_prize_pool_item.finish("抽奖失败！\n无效的参数\n物品最大数量必须为数字")
+                await add_prize_pool_item.finish("添加失败！\n无效的参数\n物品最大数量必须为数字")
             else:
                 item_max_amount = int(item_max_amount)
 
             if not item_min_amount.isdigit():
-                await add_prize_pool_item.finish("抽奖失败！\n无效的参数\n物品最小数量必须为数字")
+                await add_prize_pool_item.finish("添加失败！\n无效的参数\n物品最小数量必须为数字")
             else:
                 item_min_amount = int(item_min_amount)
 
             if not probability.isdigit():
-                await add_prize_pool_item.finish("抽奖失败！\n无效的参数\n概率必须为数字")
+                await add_prize_pool_item.finish("添加失败！\n无效的参数\n概率必须为数字")
             else:
                 probability = int(probability)
 
@@ -220,6 +231,7 @@ async def add_prize_pool_item_handle(bot: Bot, event: GroupMessageEvent):
             result, reason = prize_pool.add(item_id, item_max_amount, item_min_amount, probability)
             if result:
                 await add_prize_pool_item.finish("添加成功！")
+                logger.info(f"「{event.get_user_id()}」成功向奖池「{prize_pool.name}」添加了一个物品")
             else:
                 await add_prize_pool_item.finish(f"添加失败！\n{reason}")
         else:
@@ -233,6 +245,7 @@ del_prize_pool_item = on_command("删除奖池物品")
 
 @del_prize_pool_item.handle()
 async def del_prize_pool_item_handle(bot: Bot, event: GroupMessageEvent):
+    logger.info(f"「{event.get_user_id()}」执行了 「删除奖池物品」")
     admins = utils.admin.get()
     if event.get_user_id() in admins:
         text = event.get_plaintext().split(" ")
@@ -241,12 +254,12 @@ async def del_prize_pool_item_handle(bot: Bot, event: GroupMessageEvent):
             item_sn = text[2]
 
             if not prize_pool_id.isdigit():
-                await del_prize_pool_item.finish("抽奖失败！\n无效的参数\n奖池ID必须为数字")
+                await del_prize_pool_item.finish("删除失败！\n无效的参数\n奖池ID必须为数字")
             else:
                 prize_pool_id = int(prize_pool_id)
 
             if not item_sn.isdigit():
-                await del_prize_pool_item.finish("抽奖失败！\n无效的参数\n物品序号必须为数字")
+                await del_prize_pool_item.finish("删除失败！\n无效的参数\n物品序号必须为数字")
             else:
                 item_sn = int(item_sn)
 
@@ -254,6 +267,7 @@ async def del_prize_pool_item_handle(bot: Bot, event: GroupMessageEvent):
             result, reason = prize_pool.delete(item_sn)
             if result:
                 await del_prize_pool_item.finish("删除成功！")
+                logger.info(f"「{event.get_user_id()}」成功在奖池「{prize_pool.name}」中删除了一个物品")
             else:
                 await del_prize_pool_item.finish(f"删除失败！\n{reason}")
         else:
@@ -267,6 +281,7 @@ check_prize_pool = on_command("奖池")
 
 @check_prize_pool.handle()
 async def check_prize_pool_handle(bot: Bot, event: GroupMessageEvent):
+    logger.info(f"「{event.get_user_id()}」执行了 「奖池」")
     text = event.get_plaintext().split(" ")
     if len(text) == 2 or len(text) == 3:
         if len(text) == 2:
@@ -334,7 +349,11 @@ async def check_prize_pool_handle(bot: Bot, event: GroupMessageEvent):
         begin = 0
         for i in items[(page - 1) * 20:page * 20]:
             item_bg = Image.new("RGBA", (300, 150), (255, 255, 255, 120))
-            item_img = Image.open(f"img/item/item_{i['item_id']}.png")
+            try:
+                item_img = Image.open(f"img/item/item_{i['item_id']}.png")
+            except:
+                item_img = Image.open(f"img/item/item_0.png")
+
             item_img = item_img.resize((item_img.width * 2, item_img.height * 2))
             r, g, b, a = item_img.split()
             item_bg.paste(item_img, (round((150 - item_img.width) / 2), round((item_bg.height - item_img.height) / 2)),
@@ -373,6 +392,7 @@ prize_pool_lottery = on_command("奖池抽奖")
 
 @prize_pool_lottery.handle()
 async def prize_pool_lottery_handle(bot: Bot, event: GroupMessageEvent):
+    logger.info(f"「{event.get_user_id()}」执行了 「奖池抽奖」")
     text = event.get_plaintext().split(" ")
     if len(text) == 3:
         prize_pool_id = text[1]
@@ -422,7 +442,10 @@ async def prize_pool_lottery_handle(bot: Bot, event: GroupMessageEvent):
             column = 0
             for i in lottery_result:
                 item_bg = Image.new("RGBA", (200, 200))
-                item_img = Image.open(f"img/item/item_{i[0]}.png")
+                try:
+                    item_img = Image.open(f"img/item/item_{i[0]}.png")
+                except FileNotFoundError:
+                    item_img = Image.open(f"img/item/item_0.png")
                 item_img = item_img.resize((item_img.width * 2, item_img.height * 2))
                 r, g, b, a = item_img.split()
                 item_bg.paste(item_img, (round((200 - item_img.width) / 2), round((150 - item_img.height) / 2)), mask=a)

@@ -1,4 +1,4 @@
-from nonebot import on_command
+from nonebot import on_command, logger
 from nonebot.adapters.onebot.v11 import Bot, Event, MessageSegment, Message
 from nonebot.permission import SUPERUSER
 import models.server
@@ -13,6 +13,7 @@ add_whitelist = on_command("添加白名单")
 
 @add_whitelist.handle()
 async def add_whitelist_handle(bot: Bot, event: Event):
+    logger.info(f"「{event.get_user_id()}」执行了 「添加白名单」")
     text = event.get_plaintext().split(" ")
     if len(text) == 2:
         if config.Whitelist.method == "normal":  # 普通模式
@@ -59,6 +60,7 @@ delete_whitelist = on_command("删除白名单")
 
 @delete_whitelist.handle()
 async def delete_whitelist_handle(bot: Bot, event: Event):
+    logger.info(f"「{event.get_user_id()}」执行了 「删除白名单」")
     admin_list = utils.admin.get()
     if event.get_user_id() in admin_list:
         text = event.get_plaintext().split(" ")
@@ -107,6 +109,7 @@ reset = on_command("重置白名单", permission=SUPERUSER)
 
 @reset.handle()
 async def reset_handle(bot: Bot, event: Event):
+    logger.info(f"「{event.get_user_id()}」执行了 「重置白名单」")
     result, reason = utils.whitelist.reset()
     if result:
         await reset.finish("重置成功！\n已重置数据库中的白名单")

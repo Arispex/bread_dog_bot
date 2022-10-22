@@ -137,8 +137,8 @@ def add_item(prize_pool_id: int, item_id: int, item_max_amount: int, item_min_am
     """
     result, prize_pool_info = GetInfo.by_id(prize_pool_id)
     if result:
-        if item_id > 5124 or item_id < 1:  # 判断物品id是否合法
-            return False, "物品ID超出范围(1-5124)"
+        if item_id > 5455 or item_id < 1:  # 判断物品id是否合法
+            return False, "物品ID超出范围(1-5455)"
         if item_max_amount < 1 or item_max_amount > 999:  # 判断物品最大数量是否合法
             return False, "最大数量超出范围(1-999)"
         if item_min_amount < 1 or item_min_amount > 999:  # 判断物品最小数量是否合法

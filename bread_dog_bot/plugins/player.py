@@ -2,7 +2,7 @@ import os
 import time
 
 from PIL import Image, ImageDraw, ImageFont
-from nonebot import on_command
+from nonebot import on_command, logger
 from nonebot import require
 from nonebot.adapters.onebot.v11 import Bot, Event, MessageSegment, Message, GroupMessageEvent
 
@@ -19,6 +19,7 @@ sign_in = on_command("签到")
 @sign_in.handle()
 async def sign_in_handle(bot: Bot, event: Event):
     if event.get_plaintext() == "签到":
+        logger.info(f"「{event.get_user_id()}」执行了 「签到」")
         player = models.player.Player(event.get_user_id())
         if player.status_code:
             result, get_money = player.sign_in()
@@ -32,6 +33,7 @@ async def sign_in_handle(bot: Bot, event: Event):
                                              f"{msg}\n"
                                              f"获得{config.Currency.name}：{get_money}\n"
                                              f"当前{config.Currency.name}：{player.money}\n签到排名：{player_sign_in_log[0]}"))
+                logger.info(f"「{event.get_user_id()}」签到成功 获得{config.Currency.name}：{get_money} 签到排名：{player_sign_in_log[0]}")
             else:
                 msg = "摸摸头，今天你已经签到过了哦！"
                 result, player_sign_in_log = player.get_sign_in_log()
@@ -64,6 +66,7 @@ add_money = on_command(f"添加{config.Currency.name}")
 async def add_money_handle(bot: Bot, event: Event):
     admins = utils.admin.get()
     if event.get_user_id() in admins:
+        logger.info(f"「{event.get_user_id()}」执行了 「添加{config.Currency.name}」")
         text = event.get_plaintext().split(" ")
         if len(text) == 3:
             qq = text[1]
@@ -78,6 +81,7 @@ async def add_money_handle(bot: Bot, event: Event):
             result, player_money = player.add_money(money)
             if result:
                 await add_money.finish(Message(f"添加成功！\n该玩家剩余{config.Currency.name}：{player_money}"))
+                logger.info(f"「{event.get_user_id()}」给 「{player.name}({player.qq})」添加了 {money} {config.Currency.name}")
             else:
                 await add_money.finish(Message(f"添加失败！\n{player_money}"))
         else:
@@ -93,6 +97,7 @@ sub_money = on_command(f"扣除{config.Currency.name}")
 async def sub_money_handle(bot: Bot, event: Event):
     admins = utils.admin.get()
     if event.get_user_id() in admins:
+        logger.info(f"「{event.get_user_id()}」执行了 「扣除{config.Currency.name}」")
         text = event.get_plaintext().split(" ")
         if len(text) == 3:
             qq = text[1]
@@ -107,6 +112,7 @@ async def sub_money_handle(bot: Bot, event: Event):
             result, player_money = player.sub_money(money)
             if result:
                 await sub_money.finish(Message(f"扣除成功！\n该玩家剩余{config.Currency.name}：{player_money}"))
+                logger.info(f"「{event.get_user_id()}」扣除了 「{player.name}({player.qq})」 {money} {config.Currency.name}")
             else:
                 await sub_money.finish(Message(f"扣除失败！\n{player_money}"))
         else:
@@ -122,6 +128,7 @@ set_money = on_command(f"设置{config.Currency.name}")
 async def set_money_handle(bot: Bot, event: Event):
     admins = utils.admin.get()
     if event.get_user_id() in admins:
+        logger.info(f"「{event.get_user_id()}」执行了 「设置{config.Currency.name}」")
         text = event.get_plaintext().split(" ")
         if len(text) == 3:
             qq = text[1]
@@ -136,6 +143,7 @@ async def set_money_handle(bot: Bot, event: Event):
             result, player_money = player.set_money(money)
             if result:
                 await set_money.finish(Message(f"设置成功！\n该玩家剩余{config.Currency.name}：{player_money}"))
+                logger.info(f"「{event.get_user_id()}」给 「{player.name}({player.qq})」 设置了 {money} {config.Currency.name}")
             else:
                 await set_money.finish(Message(f"设置失败！\n{player_money}"))
         else:
@@ -150,6 +158,7 @@ player_info = on_command(f"玩家信息")
 @player_info.handle()
 async def player_info_handle(bot: Bot, event: Event):
     text = event.get_plaintext().split(" ")
+    logger.info(f"「{event.get_user_id()}」执行了 「玩家信息」")
     if len(text) == 2:
         qq = text[1]
         player = models.player.Player(qq)
@@ -171,13 +180,13 @@ async def player_info_handle(bot: Bot, event: Event):
         await player_info.finish(Message(f"查询失败！\n用法错误！\n请输入【帮助 玩家信息】获取该功能更多信息"))
 
 
-# 该功能不适配TShock Terraria1.4.0.5版本 仅支持泰拉瑞亚TShock Terraria1.4.3.2及以上版本
 player_inventory = on_command(f"玩家背包")
 
 
 @player_inventory.handle()
 async def player_inventory_handle(bot: Bot, event: GroupMessageEvent):
     text = event.get_plaintext().split(" ")
+    logger.info(f"「{event.get_user_id()}」执行了 「玩家背包」")
     if (len(text) == 3) or (len(text) == 2):
         if len(text) == 3:
             num = text[1]
@@ -216,7 +225,10 @@ async def player_inventory_handle(bot: Bot, event: GroupMessageEvent):
                     if int(i[0]) < 0:
                         row += 1
                         continue
-                    item = Image.open(f"img/item/Item_{i[0]}.png").convert("RGBA")
+                    try:
+                        item = Image.open(f"img/item/Item_{i[0]}.png").convert("RGBA")
+                    except FileNotFoundError:
+                        item = Image.open(f"img/item/Item_0.png").convert("RGBA")
                     img = Image.new("RGBA", (50, 50), (0, 0, 0, 0))
                     img.paste(item, (round((50 - item.width) / 2), round((50 - item.height) / 2)))
                     img = img.resize((round(img.width * 1.5), (round(img.height * 1.5))))
@@ -235,7 +247,10 @@ async def player_inventory_handle(bot: Bot, event: GroupMessageEvent):
                 # 金币 50-53
                 column = 0
                 for i in inventory[50:54]:
-                    item = Image.open(f"img/item/Item_{i[0]}.png").convert("RGBA")
+                    try:
+                        item = Image.open(f"img/item/Item_{i[0]}.png").convert("RGBA")
+                    except FileNotFoundError:
+                        item = Image.open(f"img/item/Item_0.png").convert("RGBA")
                     img = Image.new("RGBA", (40, 40), (0, 0, 0, 0))
                     img.paste(item, (round((40 - item.width) / 2), round((40 - item.height) / 2)))
                     img = img.resize((round(img.width * 1.5), (round(img.height * 1.5))))
@@ -250,7 +265,10 @@ async def player_inventory_handle(bot: Bot, event: GroupMessageEvent):
                 # 弹药 54-57
                 column = 0
                 for i in inventory[54:58]:
-                    item = Image.open(f"img/item/Item_{i[0]}.png").convert("RGBA")
+                    try:
+                        item = Image.open(f"img/item/Item_{i[0]}.png").convert("RGBA")
+                    except FileNotFoundError:
+                        item = Image.open(f"img/item/Item_0.png").convert("RGBA")
                     img = Image.new("RGBA", (40, 40), (0, 0, 0, 0))
                     img.paste(item, (round((40 - item.width) / 2), round((40 - item.height) / 2)))
                     img = img.resize((round(img.width * 1.5), (round(img.height * 1.5))))
@@ -264,7 +282,10 @@ async def player_inventory_handle(bot: Bot, event: GroupMessageEvent):
 
                 # 垃圾桶 58
                 for i in inventory[58:59]:
-                    item = Image.open(f"img/item/Item_{i[0]}.png").convert("RGBA")
+                    try:
+                        item = Image.open(f"img/item/Item_{i[0]}.png").convert("RGBA")
+                    except FileNotFoundError:
+                        item = Image.open(f"img/item/Item_0.png").convert("RGBA")
                     img = Image.new("RGBA", (50, 50), (0, 0, 0, 0))
                     img.paste(item, (round((50 - item.width) / 2), round((50 - item.height) / 2)))
                     img = img.resize((round(img.width * 1.5), (round(img.height * 1.5))))
@@ -278,7 +299,10 @@ async def player_inventory_handle(bot: Bot, event: GroupMessageEvent):
                 # 护甲 59 - 61
                 column = 0
                 for i in inventory[59:62]:
-                    item = Image.open(f"img/item/Item_{i[0]}.png").convert("RGBA")
+                    try:
+                        item = Image.open(f"img/item/Item_{i[0]}.png").convert("RGBA")
+                    except FileNotFoundError:
+                        item = Image.open(f"img/item/Item_0.png").convert("RGBA")
                     img = Image.new("RGBA", (50, 50), (0, 0, 0, 0))
                     img.paste(item, (round((50 - item.width) / 2), round((50 - item.height) / 2)))
                     img = img.resize((round(img.width * 1.5), (round(img.height * 1.5))))
@@ -293,7 +317,10 @@ async def player_inventory_handle(bot: Bot, event: GroupMessageEvent):
                 # 饰品 62 - 68
                 column = 0
                 for i in inventory[62:69]:
-                    item = Image.open(f"img/item/Item_{i[0]}.png").convert("RGBA")
+                    try:
+                        item = Image.open(f"img/item/Item_{i[0]}.png").convert("RGBA")
+                    except FileNotFoundError:
+                        item = Image.open(f"img/item/Item_0.png").convert("RGBA")
                     img = Image.new("RGBA", (50, 50), (0, 0, 0, 0))
                     img.paste(item, (round((50 - item.width) / 2), round((50 - item.height) / 2)))
                     img = img.resize((round(img.width * 1.5), (round(img.height * 1.5))))
@@ -308,7 +335,10 @@ async def player_inventory_handle(bot: Bot, event: GroupMessageEvent):
                 # 护甲装饰 69 - 71
                 column = 0
                 for i in inventory[69:72]:
-                    item = Image.open(f"img/item/Item_{i[0]}.png").convert("RGBA")
+                    try:
+                        item = Image.open(f"img/item/Item_{i[0]}.png").convert("RGBA")
+                    except FileNotFoundError:
+                        item = Image.open(f"img/item/Item_0.png").convert("RGBA")
                     img = Image.new("RGBA", (50, 50), (0, 0, 0, 0))
                     img.paste(item, (round((50 - item.width) / 2), round((50 - item.height) / 2)))
                     img = img.resize((round(img.width * 1.5), (round(img.height * 1.5))))
@@ -323,7 +353,10 @@ async def player_inventory_handle(bot: Bot, event: GroupMessageEvent):
                 # 饰品装饰 72 - 78
                 column = 0
                 for i in inventory[72:79]:
-                    item = Image.open(f"img/item/Item_{i[0]}.png").convert("RGBA")
+                    try:
+                        item = Image.open(f"img/item/Item_{i[0]}.png").convert("RGBA")
+                    except FileNotFoundError:
+                        item = Image.open(f"img/item/Item_0.png").convert("RGBA")
                     img = Image.new("RGBA", (50, 50), (0, 0, 0, 0))
                     img.paste(item, (round((50 - item.width) / 2), round((50 - item.height) / 2)))
                     img = img.resize((round(img.width * 1.5), (round(img.height * 1.5))))

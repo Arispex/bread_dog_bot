@@ -1,3 +1,8 @@
+## 2022/10/23(v1.8)
++ 适配 Terraria v1.4.4.5，不再适配1.4.4以下的版本~~为什么要玩旧版？？？~~
++ 优化玩家背包、邮箱等功能，物品图片不存在时使用空图片代替，而不是报错
++ 增加了~~不够全的~~日志
+
 ## 2022/10/08(v1.7.2)
 + 优化部分代码，向下兼容至 Python 3.8.6 ~~懒得在Linux上再装个Python~~
 + 新增插件[nonebot-plugin-gocqhttp](https://github.com/mnixry/nonebot-plugin-gocqhttp)

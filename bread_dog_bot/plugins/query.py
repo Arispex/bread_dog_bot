@@ -3,7 +3,7 @@ import os
 import time
 
 from PIL import Image, ImageDraw, ImageFont
-from nonebot import on_command
+from nonebot import on_command, logger
 from nonebot.adapters.onebot.v11 import Bot, Event, MessageSegment, Message, GroupMessageEvent
 
 import models.server
@@ -17,6 +17,7 @@ online_players = on_command("在线")
 @online_players.handle()
 async def online_players_handle(bot: Bot, event: Event):
     if event.get_plaintext() == "在线":
+        logger.info(f"「{event.get_user_id()}」执行了 「在线」")
         result, server_info_list = utils.server.GetInfo.all()
         msg = []
         if result:
@@ -47,6 +48,7 @@ server_list = on_command("服务器列表")
 @server_list.handle()
 async def server_list_handle(bot: Bot, event: Event):
     if event.get_plaintext() == "服务器列表":
+        logger.info(f"「{event.get_user_id()}」执行了 「服务器列表」")
         result, server_info_list = utils.server.GetInfo.all()
         msg = []
         if result:
@@ -73,6 +75,7 @@ world_progress = on_command("进度")
 
 @world_progress.handle()
 async def world_progress_handle(bot: Bot, event: GroupMessageEvent):
+    logger.info(f"「{event.get_user_id()}」执行了 「进度」")
     text = event.get_plaintext().split(" ")
     if len(text) == 2:
         num = text[1]

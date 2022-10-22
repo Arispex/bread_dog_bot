@@ -1,4 +1,4 @@
-from nonebot import on_command
+from nonebot import on_command, logger
 from nonebot.adapters.onebot.v11 import Bot, Event
 from nonebot.permission import SUPERUSER
 
@@ -10,6 +10,7 @@ add_server = on_command("添加服务器", permission=SUPERUSER)
 
 @add_server.handle()
 async def add_server_handle(bot: Bot, event: Event):
+    logger.info(f"「{event.get_user_id()}」执行了 「添加服务器」")
     text = event.get_plaintext().split(" ")
     if len(text) == 5:
         name = text[1]
@@ -31,6 +32,7 @@ delete_server = on_command("删除服务器", permission=SUPERUSER)
 
 @delete_server.handle()
 async def delete_server_handle(bot: Bot, event: Event):
+    logger.info(f"「{event.get_user_id()}」执行了 「删除服务器」")
     text = event.get_plaintext().split(" ")
     if len(text) == 2:
         name = text[1]
@@ -48,6 +50,7 @@ reset = on_command("重置服务器列表", permission=SUPERUSER)
 
 @reset.handle()
 async def reset_handle(bot: Bot, event: Event):
+    logger.info(f"「{event.get_user_id()}」执行了 「重置服务器列表」")
     result, reason = utils.server.reset()
     if result:
         await reset.finish("重置成功！\n已重置服务器序号和删除列表所有服务器")

@@ -1,4 +1,4 @@
-from nonebot import on_command
+from nonebot import on_command, logger
 from nonebot.adapters.onebot.v11 import Bot, Event, GroupMessageEvent
 
 import models.server
@@ -11,6 +11,7 @@ remote_command = on_command("执行")
 
 @remote_command.handle()
 async def remote_command_handle(bot: Bot, event: Event):
+    logger.info(f"「{event.get_user_id()}」执行了 「执行」")
     admins = utils.admin.get()
     try:
         if event.get_user_id() in admins:
@@ -32,6 +33,7 @@ async def remote_command_handle(bot: Bot, event: Event):
                     if not execute_result["response"]:
                         execute_result["response"] = ["似乎没有返回结果"]
                     await remote_command.finish(f"执行成功！\n返回以下信息：\n" + "\n".join(execute_result["response"]))
+                    logger.info(f"「{event.get_user_id()}」在 {id} 号服务器执行了 {command}")
                 else:
                     await remote_command.finish(f"执行失败！\n{execute_result}")
             else:
@@ -47,6 +49,7 @@ say = on_command("发送")
 
 @say.handle()
 async def say_handle(bot: Bot, event: GroupMessageEvent):
+    logger.info(f"「{event.get_user_id()}」执行了 「发送」")
     text = event.get_plaintext().split(" ")
     if len(text) == 3:
         id = text[1]
@@ -63,6 +66,7 @@ async def say_handle(bot: Bot, event: GroupMessageEvent):
             result, reason = conn.say(content)
             if result:
                 await say.finish(f"发送成功！")
+                logger.info(f"「{event.get_user_id()}」在 {id} 号服务器发送了一条消息：{content}")
             else:
                 await say.finish(f"发送失败！\n{reason}")
         else:

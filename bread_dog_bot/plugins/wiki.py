@@ -1,5 +1,5 @@
 from urllib import parse
-from nonebot import on_startswith
+from nonebot import on_startswith, logger
 from nonebot.adapters.onebot.v11 import Bot, GroupMessageEvent
 
 # 感谢@ACaiCat的提供的wiki代码
@@ -8,6 +8,7 @@ wiki = on_startswith(("搜索", "wiki", "Wiki", "WIKI"))
 
 @wiki.handle()
 async def wiki_(bot: Bot, event: GroupMessageEvent):
+    logger.info(f"「{event.get_user_id()}」执行了 「wiki」")
     text = event.get_plaintext().split(" ")
     if len(text) == 2:
         msg = event.get_plaintext().replace("搜索", "").replace("wiki", "").replace("Wiki", "").replace("WIKI", "").replace(
