@@ -170,9 +170,8 @@ class Connect:
 
     def kick(self, name: str, reason: str):
         """
-        获取服务器进度（Boss是否被击败）
-        该功能需要服务器插件 REST API Extensions 否则无法使用
-        :return: 获取结果 成功返回[True, 服务器进度] 失败返回[False, 失败原因]
+        踢出指定玩家
+        :return: 获取结果 成功返回[True,获得结果]失败返回[False, 失败原因]
         """
         if self.status_code:
             result, execute_result = utils.RESTAPI.Player.kick(self.ip, self.port, self.token, name, reason)
