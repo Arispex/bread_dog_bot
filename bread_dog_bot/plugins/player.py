@@ -26,7 +26,7 @@ async def self_kick_handle(bot: Bot, event: Event):
             if result:
                 for i in server_info_list:
                     conn = models.server.Connect(i[2], i[3], i[4])
-                    result, player_list = conn.kick(player.name, "在群中使用自踢")
+                    result, result_list = conn.kick(player.name, "在群中使用自踢")
             await self_kick.finish(Message("你已被踢出所有可用服务器!"))
         else:
             await self_kick.finish(Message("你没有添加白名单!"))
