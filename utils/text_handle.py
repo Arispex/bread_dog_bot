@@ -1,7 +1,3 @@
-import re
-import json
-
-
 class Translator:
     class Progress:
         @staticmethod
