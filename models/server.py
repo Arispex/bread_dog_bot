@@ -1,6 +1,6 @@
 import utils.RESTAPI
 import utils.whitelist
-
+import utils.text_handle
 
 class Connect:
     """
@@ -55,6 +55,8 @@ class Connect:
         """
         if self.status_code:
             result, execute_result = utils.RESTAPI.V3.Server.rawcmd(self.ip, self.port, self.token, command)
+            if execute_result["response"]:
+                execute_result["response"] = utils.text_handle.Text.handle_color_item(execute_result["response"])
             if result:
                 return True, execute_result
             else:
@@ -159,6 +161,21 @@ class Connect:
         """
         if self.status_code:
             result, execute_result = utils.RESTAPI.World.progress(self.ip, self.port, self.token)
+            if result:
+                return True, execute_result
+            else:
+                return False, execute_result
+        else:
+            return False, self.error
+
+    def kick(self, name: str, reason: str):
+        """
+        获取服务器进度（Boss是否被击败）
+        该功能需要服务器插件 REST API Extensions 否则无法使用
+        :return: 获取结果 成功返回[True, 服务器进度] 失败返回[False, 失败原因]
+        """
+        if self.status_code:
+            result, execute_result = utils.RESTAPI.Player.kick(self.ip, self.port, self.token, name, reason)
             if result:
                 return True, execute_result
             else:
