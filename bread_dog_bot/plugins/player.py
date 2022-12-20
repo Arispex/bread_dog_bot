@@ -23,7 +23,6 @@ async def self_kick_handle(bot: Bot, event: Event):
         result, server_info_list = utils.server.GetInfo.all()
         player = models.player.Player(event.get_user_id())
         if player.status_code:
-            msg = []
             if result:
                 for i in server_info_list:
                     conn = models.server.Connect(i[2], i[3], i[4])
