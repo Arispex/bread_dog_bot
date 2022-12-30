@@ -1,6 +1,6 @@
 import utils.RESTAPI
 import utils.whitelist
-
+import utils.text_handle
 
 class Connect:
     """
@@ -55,6 +55,11 @@ class Connect:
         """
         if self.status_code:
             result, execute_result = utils.RESTAPI.V3.Server.rawcmd(self.ip, self.port, self.token, command)
+            if execute_result["response"]:
+                Handled=[]
+                for i in execute_result["response"]:
+                    Handled.append(utils.text_handle.Text.handle_color_item(i))
+                execute_result["response"] = Handled
             if result:
                 return True, execute_result
             else:
@@ -159,6 +164,20 @@ class Connect:
         """
         if self.status_code:
             result, execute_result = utils.RESTAPI.World.progress(self.ip, self.port, self.token)
+            if result:
+                return True, execute_result
+            else:
+                return False, execute_result
+        else:
+            return False, self.error
+
+    def kick(self, name: str, reason: str):
+        """
+        踢出指定玩家
+        :return: 获取结果 成功返回[True,获得结果]失败返回[False, 失败原因]
+        """
+        if self.status_code:
+            result, execute_result = utils.RESTAPI.Player.kick(self.ip, self.port, self.token, name, reason)
             if result:
                 return True, execute_result
             else:

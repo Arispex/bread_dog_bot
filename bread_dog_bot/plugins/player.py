@@ -13,6 +13,25 @@ import utils.admin
 import utils.server
 import utils.whitelist
 
+self_kick = on_command("自踢", aliases={"自提"})
+
+
+@self_kick.handle()
+async def self_kick_handle(bot: Bot, event: Event):
+    if event.get_plaintext() == "自踢" or event.get_plaintext() == "自提":
+        logger.info(f"「{event.get_user_id()}」执行了 「自踢」")
+        result, server_info_list = utils.server.GetInfo.all()
+        player = models.player.Player(event.get_user_id())
+        if player.status_code:
+            if result:
+                for i in server_info_list:
+                    conn = models.server.Connect(i[2], i[3], i[4])
+                    result, result_list = conn.kick(player.name, "在群中使用自踢")
+            await self_kick.finish(Message("你已被踢出所有可用服务器!"))
+        else:
+            await self_kick.finish(Message("你没有添加白名单!"))
+
+
 sign_in = on_command("签到")
 
 

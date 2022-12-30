@@ -1,3 +1,7 @@
+import json
+import re
+
+
 class Translator:
     class Progress:
         @staticmethod
@@ -31,3 +35,45 @@ class Translator:
                 return progress_dict[text]
             except KeyError:
                 return text
+
+
+class Text:
+    @staticmethod
+    def code_to_color(text: str):
+
+        find = re.findall("\[c?\/[0-9a-fA-F]{6}:(.*?)\]", text)
+        while find:
+            for i in find:
+                text = re.sub("\[c?\/[0-9a-fA-F]{6}:(.*?)\]", i, text, 1)
+            find = re.findall("\[c?\/[0-9a-fA-F]{6}:(.*?)\]", text)
+        return text
+
+    @staticmethod
+    def code_to_item(text: str):
+        try:
+            with open("items.json", encoding='utf-8', errors='ignore') as fp:
+                item_info = json.loads(fp.read())
+
+            with open("prefix.json", encoding='utf-8', errors='ignore') as fp:
+                prefix_info = json.loads(fp.read())
+            find = re.findall("\[i?(?:\/s(\d{1,4}))?(?:\/p(\d{1,3}))?:(-?\d{1,4})\]", text)
+            for i in find:
+                item = "["
+                item_id = int(i[2])
+                num = i[0]
+                prefix = i[1]
+                if prefix != "":
+                    prefix_index = int(prefix) - 1
+                    item = item + prefix_info[prefix_index][1] + "的 "
+                item = item + item_info[item_id - 1][1]
+                if num != "" and num != "1":
+                    item = item + f"({num})"
+                item = item + "]"
+                text = re.sub("\[i?(?:\/s(\d{1,4}))?(?:\/p(\d{1,3}))?:(-?\d{1,4})\]", item, text, 1)
+            return text
+        except IndexError:
+            return text
+
+    @staticmethod
+    def handle_color_item(text: str):
+        return Text.code_to_item(Text.code_to_color(text))

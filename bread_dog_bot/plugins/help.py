@@ -283,6 +283,16 @@ async def help_handle(bot: Bot, event: Event):
                               "进度 [序号]\n"
                               "参数：\n"
                               "序号 - 服务器序号\n")
+        elif command == "自踢":
+            await help.finish("——自踢——\n"
+                              "权限：\n"
+                              "无\n"
+                              "介绍：\n"
+                              "将自己踢出服务器\n"
+                              "用法：\n"
+                              "自踢\n"
+                              "参数：\n"
+                              "无\n")
         elif command == "玩家邮箱":
             await help.finish("——玩家邮箱——\n"
                               "权限：\n"
