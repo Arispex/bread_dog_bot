@@ -1,3 +1,7 @@
+import json
+import re
+
+
 class Translator:
     class Progress:
         @staticmethod
@@ -36,17 +40,18 @@ class Translator:
 class Text:
     @staticmethod
     def code_to_color(text: str):
+
         find = re.findall("\[c?\/[0-9a-fA-F]{6}:(.*?)\]", text)
         while find:
             for i in find:
                 text = re.sub("\[c?\/[0-9a-fA-F]{6}:(.*?)\]", i, text, 1)
-                find = re.findall("\[c?\/[0-9a-fA-F]{6}:(.*?)\]", text)
+            find = re.findall("\[c?\/[0-9a-fA-F]{6}:(.*?)\]", text)
         return text
 
     @staticmethod
     def code_to_item(text: str):
         try:
-            with open("item.json", encoding='utf-8', errors='ignore') as fp:
+            with open("items.json", encoding='utf-8', errors='ignore') as fp:
                 item_info = json.loads(fp.read())
 
             with open("prefix.json", encoding='utf-8', errors='ignore') as fp:
@@ -65,10 +70,10 @@ class Text:
                     item = item + f"({num})"
                 item = item + "]"
                 text = re.sub("\[i?(?:\/s(\d{1,4}))?(?:\/p(\d{1,3}))?:(-?\d{1,4})\]", item, text, 1)
-                return text
+            return text
         except IndexError:
             return text
 
     @staticmethod
     def handle_color_item(text: str):
-        return Translator.Progress.item(Translator.Progress.color(text))
+        return Text.code_to_item(Text.code_to_color(text))
