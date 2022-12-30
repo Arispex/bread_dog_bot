@@ -56,7 +56,10 @@ class Connect:
         if self.status_code:
             result, execute_result = utils.RESTAPI.V3.Server.rawcmd(self.ip, self.port, self.token, command)
             if execute_result["response"]:
-                execute_result["response"] = utils.text_handle.Text.handle_color_item(execute_result["response"])
+                Handled=[]
+                for i in execute_result["response"]:
+                    Handled.append(utils.text_handle.Text.handle_color_item(i))
+                execute_result["response"] = Handled
             if result:
                 return True, execute_result
             else:
