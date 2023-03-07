@@ -19,6 +19,10 @@ _✨基于 [Nonebot2](https://github.com/nonebot/nonebot2) 和 [go-cqhttp](https
 
 </div>
 
+## 停止维护
+
+本项目已停止维护
+
 ## 声明
 
 **本项目仅用于学习，请勿用于非法用途**
